@@ -15,7 +15,8 @@ This repository contains a SvelteKit Progressive Web App for a local raised-bed 
 - `static/manifest.webmanifest` contains installable PWA metadata.
 - `static/assets/data/` contains required local JSON seed data.
 - `static/assets/icons/` contains local PWA icons.
-- `mockups/` contains visual references only.
+- `stuff/mockups/` contains visual references only.
+- `stuff/Markttauglichkeit von BeetPlaner.pdf` contains product-positioning context for MVP decisions.
 
 Generated folders such as `build/`, `.svelte-kit/`, and `node_modules/` should not be edited manually.
 
@@ -98,3 +99,51 @@ Pull requests should include a short summary, screenshots or screen recordings f
 ## Security & Configuration Tips
 
 The MVP is intentionally local-only: no login, cloud sync, external APIs, or secret keys. Keep plant, template, and season data in `static/assets/data/`. If the working app name changes, update `static/manifest.webmanifest`, `src/app.html`, `package.json`, and README references together.
+
+## MVP Product Direction
+
+Build a fast, local-first, smartphone-friendly Hochbeet- und Quadratgarten-Planer for small growing spaces. The primary value is: users can create one or more beds, see the full bed clearly, place plants into square parcels, and reliably find their plan again later.
+
+- Keep the bed and grid as the visual and functional center of the app.
+- Prefer a small, dependable planning tool over an all-in-one garden assistant.
+- Keep storage local and offline-capable; do not require an account or network connection.
+- Do not present placeholder controls or static data as fully implemented product functionality.
+- Keep control icons visually consistent; use plant emoji only as plant imagery.
+
+## Remaining MVP Work
+
+Work through these items before treating the app as a clean MVP:
+
+- [ ] Audit every visible control and remove or implement actions that are currently placeholders, including planner save/help actions, inactive filter/header actions, and settings actions without behavior.
+- [ ] Replace any misleading task language with honest seasonal guidance while hints are based on static monthly local data; use wording such as `Saisonhinweise` until there is a real task engine.
+- [ ] Standardize navigation, headers, action icons, buttons, spacing, cards, and empty/error states across all screens.
+- [ ] Finalize the home screen flow: full active bed remains visible on common phone sizes, carousel selection is reliable, and status/season guidance stays secondary to the bed.
+- [ ] Simplify bed creation around clearly named templates first, custom dimensions second, with validation for dimensions and field-size combinations.
+- [ ] Make the planting flow unambiguous: clearly show the selected parcel, avoid silently planting into a stale selection from the catalog, and give immediate confirmation after placing, editing, or deleting a plant.
+- [ ] Review and normalize local seed content for names, field requirements, harvest information, neighbor guidance, and seasonal hints.
+- [ ] Add loading, empty, and data-load error states for beds, catalog results, and local JSON loading.
+- [ ] Harden local persistence with a state-version/migration strategy before schema changes expand.
+- [ ] Verify offline PWA behavior, install metadata, local persistence after reload, and touch/responsive behavior at `360px`, `390px`, and `430px`.
+- [ ] Decide on a publishable app name or subtitle before release because `BeetPlaner` remains a working title with potential discoverability conflict.
+
+## MVP Non-Goals
+
+Do not add these until the core planning workflow has been tested and is stable:
+
+- login, cloud sync, community, or sharing
+- AI suggestions or diagnosis
+- push reminders or a full care calendar
+- multi-year crop rotation or succession-planning systems
+- payments, subscriptions, commerce, or partner integrations
+- export and print features unless explicitly promoted into the MVP scope
+
+## MVP Acceptance Checklist
+
+Before declaring the MVP ready, verify that a new user can complete these workflows without explanation:
+
+- [ ] Create a bed from a template and create a custom bed.
+- [ ] Switch between multiple beds on the home screen by swiping.
+- [ ] Open a bed, select a parcel, place a plant, edit it, and delete it.
+- [ ] Reload the app and find all created beds and plantings intact.
+- [ ] Reopen the installed/offline app without network access.
+- [ ] Use the app on a phone without clipped beds, obscured controls, or nonfunctional visible buttons.
