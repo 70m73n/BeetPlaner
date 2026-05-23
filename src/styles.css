@@ -233,7 +233,7 @@ button {
 
 .hero-grid {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   align-items: stretch;
   margin-top: 18px;
 }
@@ -250,13 +250,13 @@ button {
 
 .metric {
   display: grid;
-  gap: 8px;
+  gap: 6px;
   justify-items: center;
   min-width: 0;
-  padding: 10px 8px;
+  padding: 8px 6px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(244, 250, 239, 0.68);
   text-align: center;
 }
 
@@ -264,12 +264,12 @@ button {
 .round-icon {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: 34px;
   border-radius: 999px;
   color: var(--green-900);
   background: var(--green-100);
-  font-size: 1.4rem;
+  font-size: 1.1rem;
 }
 
 .metric small,
@@ -284,7 +284,7 @@ button {
 
 .metric strong {
   margin-top: 3px;
-  font-size: 1rem;
+  font-size: 0.92rem;
 }
 
 .bed-preview-grid,
@@ -318,7 +318,12 @@ button {
   place-items: center;
   min-width: 0;
   border: 1px solid rgba(255, 255, 255, 0.56);
+  line-height: 1;
   font-size: clamp(0.7rem, 4vw, 1.35rem);
+}
+
+.bed-preview.preview .bed-preview-grid span {
+  font-size: clamp(1.45rem, 8vw, 2.35rem);
 }
 
 .bed-preview.mini {
@@ -646,7 +651,8 @@ button {
 
 .parcel span {
   filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.4));
-  font-size: clamp(1.1rem, 7vw, 2rem);
+  line-height: 1;
+  font-size: clamp(1.35rem, 8vw, 2.35rem);
 }
 
 .parcel.selected {
