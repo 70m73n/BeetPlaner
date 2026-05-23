@@ -408,14 +408,14 @@ function BedPreview($$renderer, $$props) {
   $$renderer.component(($$renderer2) => {
     const planner = getContext("planner");
     let { bed, size = "preview", selectedParcel = "" } = $$props;
-    $$renderer2.push(`<div${attr_class(`bed-preview ${size}`)}${attr_style(`--rows:${bed.rows};--cols:${bed.columns}`)}><!--[-->`);
+    $$renderer2.push(`<div${attr_class(`bed-preview ${size}`)}${attr_style(`--rows:${bed.rows};--cols:${bed.columns}`)}><div class="bed-preview-grid"><!--[-->`);
     const each_array = ensure_array_like(planner.parcelLabels(bed));
     for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
       let label = each_array[$$index];
       const plant = bed.plantings[label] ? planner.findPlant(bed.plantings[label].plantId) : null;
       $$renderer2.push(`<span${attr_class("", void 0, { "selected": selectedParcel === label })}>${escape_html(plant?.icon || "")}</span>`);
     }
-    $$renderer2.push(`<!--]--></div>`);
+    $$renderer2.push(`<!--]--></div></div>`);
   });
 }
 function BottomNav($$renderer, $$props) {
