@@ -1,6 +1,5 @@
 <script>
   import { getContext } from "svelte";
-  import AppHeader from "$lib/components/AppHeader.svelte";
   import BedPreview from "$lib/components/BedPreview.svelte";
   import BottomNav from "$lib/components/BottomNav.svelte";
 
@@ -19,10 +18,6 @@
       slide?.scrollIntoView({ behavior: "auto", block: "nearest", inline: "center" });
     });
   });
-
-  function metric(icon, label, value) {
-    return { icon, label, value };
-  }
 
   function taskIcon(type) {
     if (type.includes("Gieß")) return "♢";
@@ -59,14 +54,7 @@
   }
 </script>
 
-<AppHeader
-  title="Mein Beet"
-  actions={[
-    { icon: "♡", label: "Favorit" },
-    { icon: "⚙", label: "Einstellungen", onClick: () => planner.go("more") }
-  ]}
-/>
-<section class="screen with-nav">
+<section class="screen with-nav home-screen">
   <div class="bed-carousel-wrap">
     <div class="bed-carousel" bind:this={carousel} onscroll={handleCarouselScroll} aria-label="Beete">
       {#each state.beds as item, index}
@@ -78,15 +66,6 @@
             </div>
             <div class="hero-grid">
               <BedPreview bed={item} selectedParcel={item.id === state.activeBedId ? state.selectedParcel : ""} />
-              <div class="metric-list" aria-label="Beetdaten">
-                {#each [
-                  metric("⌁", "Größe", `${item.widthCm} × ${item.lengthCm} cm`),
-                  metric("▦", "Raster", `${item.fieldSizeCm} cm`),
-                  metric("☼", "Sonne", planner.orientationShort(item.orientation))
-                ] as metricItem}
-                  <div class="metric"><span>{metricItem.icon}</span><div><small>{metricItem.label}</small><strong>{metricItem.value}</strong></div></div>
-                {/each}
-              </div>
             </div>
           </button>
         </article>

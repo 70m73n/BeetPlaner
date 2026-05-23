@@ -1,4 +1,4 @@
-import { k as attr_class, z as escape_html, y as ensure_array_like, j as attr, F as getContext, l as attr_style, v as derived, a1 as setContext, a6 as store_get, a9 as unsubscribe_stores } from "../../chunks/renderer.js";
+import { F as getContext, k as attr_class, l as attr_style, y as ensure_array_like, z as escape_html, j as attr, v as derived, a1 as setContext, a6 as store_get, a9 as unsubscribe_stores } from "../../chunks/renderer.js";
 import { w as writable } from "../../chunks/index.js";
 import "clsx";
 const STORAGE_KEY = "beetplaner:pwa:v2";
@@ -390,23 +390,6 @@ function relativeDate(value) {
 function toDateInput(date) {
   return date.toISOString().slice(0, 10);
 }
-function AppHeader($$renderer, $$props) {
-  let { title, compact = false, back = null, actions = [] } = $$props;
-  $$renderer.push(`<header${attr_class("app-header", void 0, { "compact": compact })}><div class="header-row">`);
-  if (back) {
-    $$renderer.push("<!--[0-->");
-    $$renderer.push(`<button class="icon-button ghost" type="button" aria-label="Zurück">←</button>`);
-  } else {
-    $$renderer.push("<!--[-1-->");
-  }
-  $$renderer.push(`<!--]--> <h1>${escape_html(title)}</h1> <div class="header-actions"><!--[-->`);
-  const each_array = ensure_array_like(actions);
-  for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
-    let action = each_array[$$index];
-    $$renderer.push(`<button class="icon-button" type="button"${attr("aria-label", action.label)}>${escape_html(action.icon)}</button>`);
-  }
-  $$renderer.push(`<!--]--></div></div></header>`);
-}
 function BedPreview($$renderer, $$props) {
   $$renderer.component(($$renderer2) => {
     const planner = getContext("planner");
@@ -429,7 +412,7 @@ function BottomNav($$renderer, $$props) {
       ["home", "⌂", "Start"],
       ["beds", "▦", "Beete"],
       ["catalog", "♧", "Katalog"],
-      ["more", "•••", "Mehr"]
+      ["more", "⚙", "Mehr"]
     ];
     $$renderer2.push(`<nav class="bottom-nav" aria-label="Hauptnavigation"><!--[-->`);
     const each_array = ensure_array_like(items);
@@ -447,26 +430,12 @@ function HomeScreen($$renderer, $$props) {
     let bed = derived(() => planner.activeBed(state));
     let hints = derived(() => planner.dashboardHints(state, bed()).slice(0, 2));
     let activeBedIndex = derived(() => Math.max(0, state.beds.findIndex((item) => item.id === state.activeBedId)));
-    function metric(icon, label, value) {
-      return { icon, label, value };
-    }
     function taskIcon(type) {
       if (type.includes("Gieß")) return "♢";
       if (type.includes("Ernte")) return "♧";
       return "☘";
     }
-    AppHeader($$renderer2, {
-      title: "Mein Beet",
-      actions: [
-        { icon: "♡", label: "Favorit" },
-        {
-          icon: "⚙",
-          label: "Einstellungen",
-          onClick: () => planner.go("more")
-        }
-      ]
-    });
-    $$renderer2.push(`<!----> <section class="screen with-nav"><div class="bed-carousel-wrap"><div class="bed-carousel" aria-label="Beete"><!--[-->`);
+    $$renderer2.push(`<section class="screen with-nav home-screen"><div class="bed-carousel-wrap"><div class="bed-carousel" aria-label="Beete"><!--[-->`);
     const each_array = ensure_array_like(state.beds);
     for (let index = 0, $$length = each_array.length; index < $$length; index++) {
       let item = each_array[index];
@@ -475,25 +444,15 @@ function HomeScreen($$renderer, $$props) {
         bed: item,
         selectedParcel: item.id === state.activeBedId ? state.selectedParcel : ""
       });
-      $$renderer2.push(`<!----> <div class="metric-list" aria-label="Beetdaten"><!--[-->`);
-      const each_array_1 = ensure_array_like([
-        metric("⌁", "Größe", `${item.widthCm} × ${item.lengthCm} cm`),
-        metric("▦", "Raster", `${item.fieldSizeCm} cm`),
-        metric("☼", "Sonne", planner.orientationShort(item.orientation))
-      ]);
-      for (let $$index = 0, $$length2 = each_array_1.length; $$index < $$length2; $$index++) {
-        let metricItem = each_array_1[$$index];
-        $$renderer2.push(`<div class="metric"><span>${escape_html(metricItem.icon)}</span><div><small>${escape_html(metricItem.label)}</small><strong>${escape_html(metricItem.value)}</strong></div></div>`);
-      }
-      $$renderer2.push(`<!--]--></div></div></button></article>`);
+      $$renderer2.push(`<!----></div></button></article>`);
     }
     $$renderer2.push(`<!--]--></div> `);
     if (state.beds.length > 1) {
       $$renderer2.push("<!--[0-->");
       $$renderer2.push(`<div class="carousel-dots" aria-label="Beet auswählen"><!--[-->`);
-      const each_array_2 = ensure_array_like(state.beds);
-      for (let index = 0, $$length = each_array_2.length; index < $$length; index++) {
-        let item = each_array_2[index];
+      const each_array_1 = ensure_array_like(state.beds);
+      for (let index = 0, $$length = each_array_1.length; index < $$length; index++) {
+        let item = each_array_1[index];
         $$renderer2.push(`<button type="button"${attr("aria-label", `${item.name} anzeigen`)}${attr("aria-current", index === activeBedIndex() ? "true" : void 0)}${attr_class("", void 0, { "active": index === activeBedIndex() })}></button>`);
       }
       $$renderer2.push(`<!--]--></div>`);
@@ -501,15 +460,32 @@ function HomeScreen($$renderer, $$props) {
       $$renderer2.push("<!--[-1-->");
     }
     $$renderer2.push(`<!--]--></div> <article class="card"><div class="section-heading"><h2>Heute im Beet</h2><button type="button">Alle anzeigen ›</button></div> <div class="task-list"><!--[-->`);
-    const each_array_3 = ensure_array_like(hints());
-    for (let $$index_3 = 0, $$length = each_array_3.length; $$index_3 < $$length; $$index_3++) {
-      let hint = each_array_3[$$index_3];
+    const each_array_2 = ensure_array_like(hints());
+    for (let $$index_2 = 0, $$length = each_array_2.length; $$index_2 < $$length; $$index_2++) {
+      let hint = each_array_2[$$index_2];
       $$renderer2.push(`<button class="task-item" type="button"><span>${escape_html(taskIcon(hint.type))}</span><strong>${escape_html(hint.type)}</strong><small>${escape_html(hint.text)}</small><b>›</b></button>`);
     }
     $$renderer2.push(`<!--]--></div></article> <article class="card"><h2>Beetstatus</h2> <div class="status-grid"><div class="status-pill"><span>▦</span><small>Belegte Felder</small><strong>${escape_html(planner.occupiedCount(bed()))} / ${escape_html(planner.parcelLabels(bed()).length)}</strong></div> <div class="status-pill"><span>□</span><small>Freie Felder</small><strong>${escape_html(planner.freeCount(bed()))} / ${escape_html(planner.parcelLabels(bed()).length)}</strong></div> <div class="status-pill"><span>▣</span><small>Nächste Ernte</small><strong>${escape_html(planner.nextHarvestText(state, bed()))}</strong></div></div></article></section> `);
     BottomNav($$renderer2, { active: "home" });
     $$renderer2.push(`<!---->`);
   });
+}
+function AppHeader($$renderer, $$props) {
+  let { title, compact = false, back = null, actions = [] } = $$props;
+  $$renderer.push(`<header${attr_class("app-header", void 0, { "compact": compact })}><div class="header-row">`);
+  if (back) {
+    $$renderer.push("<!--[0-->");
+    $$renderer.push(`<button class="icon-button ghost" type="button" aria-label="Zurück">←</button>`);
+  } else {
+    $$renderer.push("<!--[-1-->");
+  }
+  $$renderer.push(`<!--]--> <h1>${escape_html(title)}</h1> <div class="header-actions"><!--[-->`);
+  const each_array = ensure_array_like(actions);
+  for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
+    let action = each_array[$$index];
+    $$renderer.push(`<button class="icon-button" type="button"${attr("aria-label", action.label)}>${escape_html(action.icon)}</button>`);
+  }
+  $$renderer.push(`<!--]--></div></div></header>`);
 }
 function BedsScreen($$renderer, $$props) {
   $$renderer.component(($$renderer2) => {

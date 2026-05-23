@@ -147,7 +147,12 @@ button {
 }
 
 .with-nav {
-  padding-bottom: 112px;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+.home-screen {
+  margin-top: 0;
+  padding-top: 12px;
 }
 
 .card,
@@ -294,7 +299,7 @@ button {
   display: grid;
   gap: 12px;
   align-items: stretch;
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
 .hero-grid .bed-preview {
@@ -383,6 +388,11 @@ button {
 
 .bed-preview.preview .bed-preview-grid span {
   font-size: clamp(1.45rem, 8vw, 2.35rem);
+}
+
+.home-screen .bed-preview.preview {
+  width: min(100%, calc((100svh - 190px - env(safe-area-inset-bottom)) / 2));
+  margin: 0 auto;
 }
 
 .bed-preview.mini {
@@ -539,7 +549,7 @@ button {
   grid-template-columns: repeat(4, 1fr);
   width: min(100%, 430px);
   margin: 0 auto;
-  padding: 10px 14px max(12px, env(safe-area-inset-bottom));
+  padding: 6px 10px max(7px, env(safe-area-inset-bottom));
   border-top: 1px solid rgba(15, 77, 36, 0.09);
   background: rgba(255, 253, 248, 0.94);
   backdrop-filter: blur(18px);
@@ -550,16 +560,17 @@ button {
   display: grid;
   gap: 3px;
   place-items: center;
-  min-height: 62px;
+  min-height: 52px;
   border: 0;
-  border-radius: 16px;
+  border-radius: 14px;
   color: #232923;
   background: transparent;
+  font-size: 0.94rem;
   font-weight: 650;
 }
 
 .bottom-nav span {
-  font-size: 1.55rem;
+  font-size: 1.34rem;
 }
 
 .bottom-nav .active {

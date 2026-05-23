@@ -7,7 +7,7 @@
     ["home", "⌂", "Start"],
     ["beds", "▦", "Beete"],
     ["catalog", "♧", "Katalog"],
-    ["more", "•••", "Mehr"]
+    ["more", "⚙", "Mehr"]
   ];
 </script>
 
