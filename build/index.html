@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f4d24" />
+    <meta
+      name="description"
+      content="Lokaler Hochbeet- und Quadratgarten-Planer als offlinefähige PWA."
+    />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/assets/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/icon.svg" />
+    <link href="./_app/immutable/entry/start.X8mWUtcd.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/z8HCp8EI.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/bUU1HKDh.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/y8JJtdV4.js" rel="modulepreload">
+		<link href="./_app/immutable/entry/app.DHDe6xVQ.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DcClgf04.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/8kBbgSCG.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BKrfcbRw.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/CiBveqg5.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/0.DwGsGquQ.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/2.u9WrXytq.js" rel="modulepreload">
+		
+		<link href="./_app/immutable/assets/2.yhy-05Yo.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">
+			<script>
+				{
+					__sveltekit_16amst2 = {
+						base: new URL(".", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.X8mWUtcd.js"),
+						import("./_app/immutable/entry/app.DHDe6xVQ.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+
+					if ('serviceWorker' in navigator) {
+						const script_url = './service-worker.js';
+						const policy = globalThis?.window?.trustedTypes?.createPolicy(
+							'sveltekit-trusted-url',
+							{ createScriptURL(url) { return url; } }
+						);
+						const sanitised = policy?.createScriptURL(script_url) ?? script_url;
+						addEventListener('load', function () {
+							navigator.serviceWorker.register(sanitised);
+						});
+					}
+				}
+			</script>
+		</div>
+  </body>
+</html>

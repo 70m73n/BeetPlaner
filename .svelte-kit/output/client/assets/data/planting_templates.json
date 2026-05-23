@@ -1,0 +1,80 @@
+[
+  {
+    "id": "starter_raised",
+    "name": "Einsteiger-Hochbeet",
+    "description": "Robuste Mischung aus Gemüse, Kräutern und schneller Ernte.",
+    "suitableFor": "Hochbeet",
+    "bedTemplateId": "raised_120_240",
+    "plantPlacements": [
+      {"parcelLabel": "A1", "plantId": "lettuce"},
+      {"parcelLabel": "A2", "plantId": "lettuce"},
+      {"parcelLabel": "A3", "plantId": "chives"},
+      {"parcelLabel": "B1", "plantId": "tomato"},
+      {"parcelLabel": "B2", "plantId": "basil"},
+      {"parcelLabel": "C1", "plantId": "carrot"},
+      {"parcelLabel": "C2", "plantId": "radish"},
+      {"parcelLabel": "D1", "plantId": "strawberry"}
+    ]
+  },
+  {
+    "id": "salad_herbs",
+    "name": "Salat & Kräuter",
+    "description": "Leicht zu pflegen und gut für kleine Flächen.",
+    "suitableFor": "Kräuterbeet",
+    "bedTemplateId": "herb_60_80",
+    "plantPlacements": [
+      {"parcelLabel": "A1", "plantId": "lettuce"},
+      {"parcelLabel": "A2", "plantId": "basil"},
+      {"parcelLabel": "B1", "plantId": "chives"},
+      {"parcelLabel": "B2", "plantId": "parsley"}
+    ]
+  },
+  {
+    "id": "tomato_basil",
+    "name": "Tomate & Basilikum",
+    "description": "Klassische Nachbarschaft für sonnige Standorte.",
+    "suitableFor": "Hochbeet",
+    "plantPlacements": [
+      {"parcelLabel": "B2", "plantId": "tomato"},
+      {"parcelLabel": "B3", "plantId": "basil"},
+      {"parcelLabel": "C2", "plantId": "tomato"},
+      {"parcelLabel": "C3", "plantId": "basil"}
+    ]
+  },
+  {
+    "id": "quick_harvest",
+    "name": "Schnelle Ernte",
+    "description": "Radieschen, Salat und Kräuter für schnelle Erfolgserlebnisse.",
+    "suitableFor": "Balkonbeet",
+    "plantPlacements": [
+      {"parcelLabel": "A1", "plantId": "radish"},
+      {"parcelLabel": "A2", "plantId": "lettuce"},
+      {"parcelLabel": "B1", "plantId": "basil"},
+      {"parcelLabel": "B2", "plantId": "chives"}
+    ]
+  },
+  {
+    "id": "kids_snack",
+    "name": "Kinder-/Naschbeet",
+    "description": "Erdbeeren, Karotten und milde Snacks.",
+    "suitableFor": "Hochbeet",
+    "plantPlacements": [
+      {"parcelLabel": "A1", "plantId": "strawberry"},
+      {"parcelLabel": "A2", "plantId": "strawberry"},
+      {"parcelLabel": "B1", "plantId": "carrot"},
+      {"parcelLabel": "B2", "plantId": "radish"}
+    ]
+  },
+  {
+    "id": "balcony_herbs",
+    "name": "Balkon-Kräuterbeet",
+    "description": "Kompakte Kräuter für Balkon und Küche.",
+    "suitableFor": "Balkon",
+    "bedTemplateId": "balcony_40_100",
+    "plantPlacements": [
+      {"parcelLabel": "A1", "plantId": "basil"},
+      {"parcelLabel": "A2", "plantId": "chives"},
+      {"parcelLabel": "B1", "plantId": "parsley"}
+    ]
+  }
+]

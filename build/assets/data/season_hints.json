@@ -1,0 +1,10 @@
+[
+  {"id": "may_tomato_water", "plantId": "tomato", "month": 5, "type": "Gießen", "text": "Tomaten und Basilikum benötigen Wasser."},
+  {"id": "may_carrot_check", "plantId": "carrot", "month": 5, "type": "Kontrollieren", "text": "Kontrolliere Karotten auf Keimung."},
+  {"id": "may_strawberry_harvest", "plantId": "strawberry", "month": 5, "type": "Bald ernten", "text": "Erdbeeren sind bald erntereif."},
+  {"id": "may_radish_sow", "plantId": "radish", "month": 5, "type": "Jetzt säen", "text": "Jetzt säen: Radieschen, Salat."},
+  {"id": "may_basil_plant", "plantId": "basil", "month": 5, "type": "Jetzt pflanzen", "text": "Jetzt pflanzen: Basilikum, Tomate."},
+  {"id": "jun_salad_follow", "plantId": "lettuce", "month": 6, "type": "Nachpflanzung", "text": "Freie Felder können gut mit Salat nachgepflanzt werden."},
+  {"id": "jul_bean_sow", "plantId": "bean", "month": 7, "type": "Jetzt säen", "text": "Bohnen können jetzt noch in freie Felder."},
+  {"id": "aug_radish_follow", "plantId": "radish", "month": 8, "type": "Nachpflanzung", "text": "Radieschen eignen sich für schnelle Nachkultur."}
+]

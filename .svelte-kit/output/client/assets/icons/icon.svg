@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BeetPlaner Icon">
+  <rect width="512" height="512" rx="112" fill="#0f4d24"/>
+  <path d="M112 224l144-72 144 72-144 72-144-72z" fill="#8b5a2b"/>
+  <path d="M112 224v112l144 72V296l-144-72z" fill="#6f4520"/>
+  <path d="M400 224v112l-144 72V296l144-72z" fill="#9b6a35"/>
+  <path d="M152 232l104-52 104 52-104 52-104-52z" fill="#2a1a10"/>
+  <path d="M256 178v104M204 204l104 52M308 204l-104 52" stroke="#f9f5ea" stroke-width="12" stroke-linecap="round" opacity=".8"/>
+  <path d="M244 132c-4-42 20-71 62-86 13 47-2 80-62 86z" fill="#87c65f"/>
+  <path d="M238 132c-37-22-46-58-23-95 38 26 48 59 23 95z" fill="#b5dd7a"/>
+  <path d="M254 142c18-24 44-34 76-29-11 34-35 50-76 29z" fill="#5fa545"/>
+</svg>

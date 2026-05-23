@@ -1,0 +1,887 @@
+Rolle:
+Du bist ein erfahrener Flutter-Entwickler, Mobile-UX-Designer und Produktentwickler. Erstelle einen fokussierten Android-MVP für eine App zur Planung kleiner Anbauflächen nach dem Prinzip „Gärtnern im Quadrat“.
+
+Arbeitsname:
+BeetPlaner
+
+Wichtiger Hinweis zum Namen:
+„BeetPlaner“ ist zunächst nur ein Arbeitstitel. Der App-Name muss im Code, in der Konfiguration und in der README leicht austauschbar sein, weil es bereits ähnliche Produktbezeichnungen im Markt gibt.
+
+Produktpositionierung:
+Die App ist kein allgemeiner Gartenplaner, kein KI-Gartenhelfer und keine große All-in-One-Garten-App.
+
+Die App ist ein einfacher, schneller, lokaler und offline nutzbarer Hochbeet- und Quadratgarten-Planer für kleine Flächen.
+
+Kernversprechen:
+„In wenigen Minuten ein kleines Beet planen, bepflanzen und über die Saison im Blick behalten – ohne Login, ohne Cloud, ohne überladene Funktionen.“
+
+Zielgruppe MVP:
+- Anfängerinnen und Anfänger
+- Hochbeet-Nutzer
+- Balkon- und Terrassengärtner
+- Kleingarten-Neulinge
+- Menschen mit wenig Platz
+- Menschen mit wenig Gartenerfahrung
+- Nutzer, die eine einfache mobile Lösung ohne Login, Cloud und Community suchen
+
+MVP-Kernidee:
+Der erste MVP soll beweisen, dass Nutzer ihr Hochbeet schnell anlegen, visuell bepflanzen und einfache saisonale Hinweise erhalten können.
+
+Die App konzentriert sich auf drei Dinge:
+
+1. Beet schnell anlegen
+2. Felder sinnvoll bepflanzen
+3. Saisonale Aufgaben sichtbar machen
+
+MVP-Erfolgskriterium:
+Der MVP ist erfolgreich, wenn ein Nutzer ohne Erklärung Folgendes schafft:
+
+1. App öffnen
+2. Hochbeet-Vorlage wählen
+3. Raster verstehen
+4. Feld antippen
+5. Pflanze auswählen
+6. Pflanzung speichern
+7. auf der Startseite sehen, was im Beet gerade wichtig ist
+
+Technologie:
+- Flutter
+- Zielplattform: Android
+- Entwicklungsumgebung: Linux, VS Code
+- Material 3 als technische Grundlage
+- lokale Speicherung
+- Pflanzenstammdaten aus lokaler JSON-Datei
+- keine Cloud
+- kein Login
+- keine externe Pflicht-API
+- keine KI-Funktion in Version 1
+- keine Push Notifications in Version 1
+- keine Commerce-Funktionen in Version 1
+- keine Community-Funktionen in Version 1
+
+Wichtig:
+Die App muss mit folgenden Befehlen startbar sein:
+
+flutter pub get
+flutter run
+flutter build apk
+
+Mockups:
+Die Mockups liegen im Projektordner unter:
+
+/mockups/startseite.png
+/mockups/beet_planen.png
+/mockups/pflanzenkatalog.png
+/mockups/feld_detail.png
+
+Falls die Dateinamen abweichen, prüfe den Ordner /mockups und verwende die vorhandenen Bilder als visuelle Referenz.
+
+Die App soll sich optisch eng an den Mockups orientieren, aber nicht pixelgenau nachgebaut werden. Wichtig sind:
+
+- moderner, hochwertiger Look
+- ruhige grüne Farbwelt
+- klare Kartenstruktur
+- gute Lesbarkeit
+- keine überladene Startseite
+- Bottom Navigation als Hauptnavigation
+- ein visuell starkes Hochbeet-Raster
+- sehr gute Bedienbarkeit auf dem Smartphone
+
+Designrichtung:
+Die App soll wie ein moderner, fokussierter Garten-MVP wirken:
+
+- ruhig
+- schnell erfassbar
+- freundlich
+- lokal
+- aufgeräumt
+- nicht verspielt
+- nicht überladen
+- keine Super-App-Optik
+
+Farbwelt:
+- Dunkelgrüner Header: #0F4D24
+- Akzentgrün: #2F7D3B
+- Hellgrün: #EAF5E7
+- Hintergrund: #FAF8F3
+- Kartenhintergrund: #FFFFFF oder #FFFDF8
+- Text dunkel: #1F2A1F
+- Text sekundär: #5F6B5F
+- Warn-/Löschfarbe: #D93025
+- Erde: dunkles Braun
+- Holzrahmen: warmes Braun
+
+Typografie:
+- klare Sans-Serif-Schrift
+- große, gut lesbare Überschriften
+- keine zu kleinen Texte
+- keine abgeschnittenen Texte
+- gute Bedienbarkeit auf typischen Android-Screens
+
+Asset-Strategie MVP:
+Für Version 1 keine aufwendige Bildgenerierung für Gemüse, Obst oder Kräuter.
+
+Pflanzen werden im MVP über einfache, einheitliche Darstellungen visualisiert:
+
+- Unicode-Emojis oder
+- einfache lokale Icon-Platzhalter oder
+- freie Open-Source-Icons, wenn sie sauber eingebunden werden können
+
+Wichtig:
+Keine Mischung aus Fotos, Cliparts, generierten Bildern und Emojis. Lieber schlicht und konsistent.
+
+Nur das Hochbeet ist ein zentrales visuelles Asset.
+
+Für das Hochbeet gibt es zwei erlaubte Wege:
+
+Variante A:
+Wenn /assets/images/raised_bed.png vorhanden ist, verwende dieses Asset.
+
+Variante B:
+Wenn kein Asset vorhanden ist, baue das Hochbeet als Flutter-Widget:
+- Holzrahmen
+- dunkle Erde
+- sichtbares Quadrat-Raster
+- abgerundete Ecken
+- leichte Schatten
+- Pflanzenicons innerhalb der Felder
+- klare Markierung ausgewählter Felder
+
+Nur wenn es für den visuellen Eindruck unbedingt nötig ist, darf ein eigenes Hochbeet-Asset erzeugt werden. Keine generierten Pflanzenbilder.
+
+Navigation:
+Die App hat eine Bottom Navigation mit vier Hauptbereichen:
+
+1. Start
+2. Beete
+3. Katalog
+4. Mehr
+
+Die Bottom Navigation ist die Hauptnavigation. Deshalb dürfen auf der Startseite keine großen Schnellzugriffskacheln stehen wie:
+- Beet planen
+- Pflanzungen
+- Zufallsplan
+- Pflanzenkatalog
+
+Diese Funktionen gehören in die Navigation oder in kontextbezogene Aktionen.
+
+Screen 1: Start
+
+Ziel:
+Die Startseite ist ein ruhiges Dashboard. Sie zeigt den aktuellen Zustand und erzeugt saisonalen Nutzen. Sie ist kein Menü mit vielen Funktionskacheln.
+
+Inhalte:
+- Dunkelgrüner Header mit Titel „Mein Beet“
+- rechts kleine Icons für Benachrichtigung und Einstellungen
+- kompakte Hauptkarte für das aktive Beet, z. B. „Hochbeet 1“
+- Anzeige:
+  - Größe: 120 × 240 cm
+  - Feldgröße: 30 × 30 cm
+  - Ausrichtung: Südseite
+- kleine Rastervorschau mit wenigen Pflanzenicons
+- Abschnitt „Diese Woche im Beet“
+- Abschnitt „Beetstatus“
+- Abschnitt „Letzte Pflanzungen“
+- Abschnitt „Freie Felder“
+
+Dashboard-Hinweise:
+Die Hinweise dürfen im MVP aus einfacher Monatslogik und Demodaten entstehen. Keine echte Aufgaben-Engine, keine Push Notifications, keine Wetterdaten.
+
+Beispielhinweise:
+- „Tomaten und Basilikum benötigen Wasser.“
+- „Kontrolliere Karotten auf Keimung.“
+- „Erdbeeren sind bald erntereif.“
+- „Feld B3 ist frei und kann neu bepflanzt werden.“
+- „Jetzt säen: Radieschen, Salat.“
+- „Jetzt pflanzen: Basilikum, Tomate.“
+
+Beetstatus:
+- Belegte Felder: z. B. 7 / 32
+- Freie Felder: z. B. 25 / 32
+- Bald mögliche Ernte
+- frisch bepflanzte Felder
+
+Screen 2: Beete
+
+Ziel:
+Nutzer sehen ihre vorhandenen Beete, können ein Beet öffnen oder ein neues Beet mit Vorlage anlegen.
+
+Inhalte:
+- Header „Beete“
+- Liste vorhandener Beete
+- Karte für „Hochbeet 1“
+- Größe
+- Feldgröße
+- Ausrichtung
+- belegte Felder
+- kleine Rastervorschau
+- Button „Neues Beet“
+- Bereich „Vorlage wählen“
+
+Funktion:
+- Antippen einer Beetkarte öffnet „Beet planen“
+- „Neues Beet“ öffnet ein einfaches Formular
+- Vorlagen können ein Beet automatisch anlegen und mit Beispielpflanzungen füllen
+
+Neues-Beet-Formular:
+Pflichtfelder:
+- Beetname
+- Breite in cm
+- Länge in cm
+- Feldgröße
+- Ausrichtung
+
+Feldgröße:
+- 30 × 30 cm
+- 40 × 40 cm
+- frei eingeben
+
+Ausrichtung:
+- Norden oben
+- Osten oben
+- Süden oben
+- Westen oben
+
+Nach der Eingabe wird sofort das Raster angezeigt.
+
+MVP-Beetvorlagen:
+- Hochbeet 120 × 240 cm
+- Hochbeet 80 × 120 cm
+- Balkonbeet 40 × 100 cm
+- Kräuterbeet 60 × 80 cm
+
+MVP-Pflanzvorlagen:
+- Einsteiger-Hochbeet
+- Salat & Kräuter
+- Tomate & Basilikum
+- Schnelle Ernte
+- Kinder-/Naschbeet
+- Balkon-Kräuterbeet
+
+Vorlagenfunktion:
+- Vorlage auswählen
+- Beet wird automatisch mit Beispielpflanzung gefüllt
+- Nutzer kann danach alles manuell ändern
+- Vorlagen sind lokale JSON-Daten oder fest definierte Seed-Daten
+- keine externe API
+
+Screen 3: Beet planen
+
+Ziel:
+Der wichtigste Screen des MVP. Nutzer planen das Hochbeet feldweise.
+
+Inhalte:
+- Header „Beet planen“
+- Zurück-Pfeil links
+- Hilfe-Icon rechts
+- kompakte Karte mit aktuellem Beet
+- Größe, Feldgröße, Ausrichtung
+- Button „Speichern“
+- Umschalter:
+  - Manuell
+  - Zufall
+  - Zurücksetzen
+- Richtungsanzeige:
+  - z. B. „Norden ↑“
+  - z. B. „Südseite“
+- großes Beet-Raster:
+  - Holzrahmen
+  - dunkle Erde
+  - sichtbare Rasterlinien
+  - freie Felder erkennbar
+  - belegte Felder mit Pflanzenemoji/Icon
+  - ausgewähltes Feld klar markiert
+- Feldlabels:
+  - A1, A2, A3
+  - B1, B2, B3
+  - C1, C2, C3 usw.
+- Pflanzenleiste unten:
+  - Tomate
+  - Salat
+  - Karotte
+  - Erdbeere
+  - Basilikum
+  - Schnittlauch
+- Aktionsbuttons:
+  - Pflanze hinzufügen
+  - Feld bearbeiten
+  - Feld löschen
+  - Raster ändern
+
+Funktion:
+- Feld antippen wählt Feld aus
+- ausgewähltes Feld wird visuell hervorgehoben
+- bei leerem Feld kann der Nutzer eine Pflanze auswählen
+- bei belegtem Feld kann der Nutzer das Feld-Detail öffnen
+- Pflanze aus Pflanzenleiste antippen setzt Pflanze auf aktuell ausgewähltes Feld
+- Feld löschen entfernt Pflanzung vom ausgewählten Feld
+- Speichern persistiert den Beetplan lokal
+- Zurücksetzen leert das Beet nach Rückfrage
+- Zufall erzeugt eine einfache Demo-Verteilung
+- nach dem Setzen einer Pflanze werden einfache Hinweise angezeigt
+
+Einfache Plausibilitätsprüfung:
+Beim Auswählen oder Setzen einer Pflanze zeigt die App kurze Hinweise auf Basis lokaler JSON-Daten.
+
+Beispiele:
+- „Passt gut in dieses Feld.“
+- „Für dieses Feld eher zu groß.“
+- „Aktuell ist kein guter Pflanzmonat.“
+- „Braucht viel Sonne.“
+- „Passt gut neben Basilikum.“
+- „Lieber nicht direkt neben diese Pflanze setzen.“
+- „In dieses Feld passen ca. 9–16 Pflanzen.“
+
+Wichtig:
+Keine komplexe botanische Optimierung. Nur einfache Regeln aus der lokalen Pflanzen-JSON.
+
+Zufallsgenerator MVP:
+Der Zufallsgenerator ist ausdrücklich nur eine Demo-Funktion.
+
+Er soll:
+- Pflanzen aus der lokalen Liste wählen
+- freie Felder belegen
+- vermeiden, dass alle Felder dieselbe Pflanze bekommen
+- Pflanzen mit zu großem Feldbedarf vermeiden, wenn möglich
+- Ergebnis lokal speichern
+
+Er soll nicht:
+- echte Mischkultur berechnen
+- Fruchtfolge beachten
+- Standortdaten auswerten
+- KI nutzen
+- optimale Ertragsplanung machen
+
+Screen 4: Pflanzenkatalog
+
+Ziel:
+Der Katalog ist keine riesige Pflanzenbibliothek, sondern eine kleine MVP-Stammdatenliste, die Nutzer beim Planen unterstützt.
+
+Inhalte:
+- Header „Pflanzenkatalog“
+- Suchfeld „Pflanzen suchen…“
+- Kategorie-Chips:
+  - Gemüse
+  - Kräuter
+  - Obst
+  - Blumen
+- optionale Filterchips:
+  - Anfängerfreundlich
+  - schnelle Ernte
+  - kleines Feld geeignet
+- 2-Spalten-Grid mit Pflanzenkarten
+
+Jede Pflanzenkarte enthält:
+- Icon/Emoji
+- Pflanzenname
+- Kategorie
+- Lichtbedarf
+- Nährstoffbedarf
+- Feldbedarf
+- Pflanzen pro Feld
+- Pflanzzeit
+- Erntezeit
+- Anfängerfreundlichkeit
+- Button „Für Feld auswählen“
+
+MVP-Pflanzen:
+- Tomate
+- Karotte
+- Erdbeere
+- Basilikum
+- Salat
+- Paprika
+- Gurke
+- Zwiebel
+- Schnittlauch
+- Petersilie
+- Radieschen
+- Bohne
+
+Funktion:
+- Suche filtert nach Pflanzenname
+- Kategorie-Chips filtern nach Kategorie
+- optionale Filterchips können vorbereitet oder einfach umgesetzt werden
+- „Für Feld auswählen“ merkt die Pflanze als aktuelle Auswahl oder setzt sie auf ein gewähltes Feld
+
+Screen 5: Feld-Detail
+
+Ziel:
+Nutzer dokumentieren, was in einem Feld konkret passiert ist.
+
+Beispielscreen:
+„Feld B3“
+
+Inhalte:
+- Header „Feld B3“
+- Zurück-Pfeil links
+- Drei-Punkte-Menü rechts
+- Pflanzenkarte:
+  - Icon/Emoji oder Platzhalter
+  - Name: Tomate
+  - Badge: Gemüse
+  - Text: „Fruchtgemüse • Starkzehrer“
+  - Text: „Ernte in ca. 70–80 Tagen“
+- Parzellenkarte:
+  - Parzelle B3
+  - 30 × 30 cm
+  - kleine Beetgrafik mit hervorgehobener Parzelle
+- Feldbedarf-Karte:
+  - „Empfohlen: 1 Pflanze pro Feld“
+  - oder „In dieses Feld passen ca. 9–16 Pflanzen“
+- Formularfelder:
+  - Pflanze
+  - Gepflanzt am
+  - Direktsaat / Jungpflanze
+  - Anzahl
+  - Sorte
+  - Notiz
+- Beispielwerte:
+  - Gepflanzt am: 12.05.2026
+  - Direktsaat / Jungpflanze: Jungpflanze
+  - Anzahl: 1
+  - Sorte: San Marzano
+  - Notiz: Unterstützen mit Stab
+- Info-Chips:
+  - Sonne: Süd
+  - Starkzehrer
+  - Guter Nachbar: Basilikum, Karotte
+  - Anfängerfreundlich: mittel
+- Button „Speichern“
+- Button „Pflanzung löschen“
+
+Funktion:
+- Pflanze auswählbar
+- Datum per Date Picker ändern
+- Anzahl per Plus/Minus ändern
+- Sorte editierbar
+- Notiz editierbar
+- Speichern legt oder aktualisiert die Pflanzung lokal
+- Löschen entfernt die Pflanzung aus dem Feld
+
+Screen 6: Mehr
+
+Ziel:
+Einfacher Einstellungs- und Info-Bereich.
+
+Inhalte:
+- Daten zurücksetzen
+- Über die App
+- Lizenzhinweise
+- lokale Dateninfo
+- App-Version
+
+Lokale Dateninfo:
+Kurz erklären:
+- „Alle Daten bleiben auf diesem Gerät.“
+- „Kein Login.“
+- „Keine Cloud.“
+- „Offline nutzbar.“
+
+Datenmodell:
+
+Plant:
+- id
+- name
+- category
+- icon
+- imagePath optional
+- lightRequirement
+- nutrientRequirement
+- recommendedFieldSizeCm
+- plantsPerFieldMin
+- plantsPerFieldMax
+- heightCm optional
+- sowingMonths
+- plantingMonths
+- harvestDaysMin
+- harvestDaysMax
+- goodNeighbors
+- badNeighbors
+- beginnerFriendliness
+- quickHarvest
+- smallSpaceSuitable
+- notes
+
+Bed:
+- id
+- name
+- widthCm
+- lengthCm
+- fieldSizeCm
+- orientation
+- rows
+- columns
+- createdAt
+- updatedAt
+
+Parcel:
+- id
+- bedId
+- row
+- column
+- label
+
+Planting:
+- id
+- parcelId
+- plantId
+- plantedDate
+- plantingType
+- count
+- variety
+- note
+- createdAt
+- updatedAt
+
+BedTemplate:
+- id
+- name
+- widthCm
+- lengthCm
+- fieldSizeCm
+- orientation
+- description
+
+PlantingTemplate:
+- id
+- name
+- description
+- suitableFor
+- bedTemplateId optional
+- plantPlacements
+
+SeasonHint:
+- id
+- plantId
+- month
+- type
+- text
+
+Lokale Daten:
+Pflanzenstammdaten:
+- /assets/data/plants.json
+
+Beetvorlagen:
+- /assets/data/bed_templates.json
+
+Pflanzvorlagen:
+- /assets/data/planting_templates.json
+
+Saisonhinweise:
+- /assets/data/season_hints.json
+
+App-Daten:
+- lokal speichern mit Hive oder SQLite
+- bevorzugt einfache, robuste Lösung
+- keine Cloud-Abhängigkeit
+
+plants.json:
+Lege eine Datei mit mindestens 12 Pflanzen an.
+
+Jede Pflanze braucht:
+- id
+- name
+- category
+- icon
+- lightRequirement
+- nutrientRequirement
+- recommendedFieldSizeCm
+- plantsPerFieldMin
+- plantsPerFieldMax
+- sowingMonths
+- plantingMonths
+- harvestDaysMin
+- harvestDaysMax
+- goodNeighbors
+- badNeighbors
+- beginnerFriendliness
+- quickHarvest
+- smallSpaceSuitable
+- notes
+
+Beispielwerte Feldbedarf:
+Tomate:
+- plantsPerFieldMin: 1
+- plantsPerFieldMax: 1
+
+Salat:
+- plantsPerFieldMin: 1
+- plantsPerFieldMax: 4
+
+Karotte:
+- plantsPerFieldMin: 9
+- plantsPerFieldMax: 16
+
+Radieschen:
+- plantsPerFieldMin: 9
+- plantsPerFieldMax: 16
+
+Basilikum:
+- plantsPerFieldMin: 1
+- plantsPerFieldMax: 4
+
+Beispiel Tomate:
+- icon: 🍅
+- category: Gemüse
+- lightRequirement: Sonne
+- nutrientRequirement: Starkzehrer
+- recommendedFieldSizeCm: 30
+- plantsPerFieldMin: 1
+- plantsPerFieldMax: 1
+- sowingMonths: [2, 3, 4]
+- plantingMonths: [5, 6]
+- harvestDaysMin: 70
+- harvestDaysMax: 80
+- goodNeighbors: [Basilikum, Karotte]
+- badNeighbors: [Kartoffel]
+- beginnerFriendliness: mittel
+- quickHarvest: false
+- smallSpaceSuitable: true
+- notes: Benötigt Stütze und sonnigen Standort
+
+Einfache Saisonlogik:
+Die App nutzt den aktuellen Monat des Geräts und gleicht ihn mit plants.json und season_hints.json ab.
+
+Mögliche Hinweisarten:
+- Jetzt säen
+- Jetzt pflanzen
+- Bald ernten
+- Nachpflanzung möglich
+- Kontrollieren
+- Gießen
+
+Technische Einschränkung:
+- keine Wetterdaten
+- keine Standortdaten
+- keine Frostwarnungen
+- keine Push Notifications
+- keine externe API
+- keine KI
+
+Dashboard-Logik:
+Die Startseite erzeugt Hinweise aus:
+- aktuellem Monat
+- gepflanzten Pflanzen
+- Pflanzdatum
+- Erntedauer
+- freien Feldern
+- belegten Feldern
+- lokalen Saisonhinweisen
+
+Beispiele:
+Wenn aktueller Monat in plantingMonths einer Pflanze liegt:
+- „Jetzt pflanzen: Basilikum.“
+
+Wenn plantedDate plus harvestDaysMin bald erreicht ist:
+- „Erdbeeren sind bald erntereif.“
+
+Wenn ein Feld leer ist:
+- „Feld B3 ist frei und kann neu bepflanzt werden.“
+
+Wenn eine Pflanze frisch gesetzt wurde:
+- „Karotte wurde vor 5 Tagen gepflanzt. Kontrolliere die Keimung.“
+
+Projektstruktur:
+
+/lib
+  /main.dart
+  /app.dart
+  /theme
+    app_theme.dart
+  /models
+    plant.dart
+    bed.dart
+    parcel.dart
+    planting.dart
+    bed_template.dart
+    planting_template.dart
+    season_hint.dart
+  /data
+    plant_repository.dart
+    bed_repository.dart
+    planting_repository.dart
+    template_repository.dart
+    season_hint_repository.dart
+    local_storage_service.dart
+  /services
+    season_service.dart
+    plausibility_service.dart
+    dashboard_service.dart
+    grid_service.dart
+  /screens
+    home_screen.dart
+    beds_screen.dart
+    bed_planner_screen.dart
+    plant_catalog_screen.dart
+    field_detail_screen.dart
+    more_screen.dart
+    edit_bed_screen.dart
+    template_selection_screen.dart
+  /widgets
+    app_header.dart
+    bottom_nav.dart
+    bed_summary_card.dart
+    bed_status_card.dart
+    weekly_tasks_card.dart
+    recent_plantings_card.dart
+    free_fields_card.dart
+    square_bed_grid.dart
+    parcel_tile.dart
+    plant_card.dart
+    plant_icon.dart
+    info_chip.dart
+    action_button.dart
+    raised_bed_preview.dart
+    plausibility_hint_card.dart
+    field_requirement_card.dart
+
+/assets
+  /data
+    plants.json
+    bed_templates.json
+    planting_templates.json
+    season_hints.json
+  /images
+    raised_bed.png optional
+  /mockups
+    startseite.png
+    beet_planen.png
+    pflanzenkatalog.png
+    feld_detail.png
+
+Nicht umsetzen im MVP:
+- Login
+- Cloud-Sync
+- Benutzerkonto
+- Community
+- Chat/KI-Assistent
+- KI-Planung
+- echte Wetterdaten
+- Standortdaten
+- Frostwarnungen
+- Push Notifications
+- Shop
+- Abo-Modell
+- Zahlungsfunktionen
+- komplexe Mischkultur-Optimierung
+- Fruchtfolge über mehrere Jahre
+- umfangreiche Pflanzenbilder
+- perfekte botanische Datenbank
+- Web-Version
+- Tablet-Optimierung
+- Familien-/Schul-/Vereinsmodus als echtes Feature
+
+Nice-to-have, aber nicht zwingend:
+Diese Funktionen können strukturell vorbereitet, aber müssen nicht vollständig umgesetzt werden:
+
+- Export als Bild oder PDF
+- Druckansicht
+- Ernte dokumentieren
+- mehrere Beete
+- einfache Erinnerungsliste ohne Push
+- Folgepflanzung nach Ernte
+- Filter „anfängerfreundlich“
+- Filter „schnelle Ernte“
+- Filter „kleines Feld geeignet“
+
+Spätere Entwicklungsperspektiven:
+Nach dem MVP können diese Ausbaustufen vorbereitet werden:
+
+1. bessere Saisonlogik
+2. Folgepflanzung nach Ernte
+3. Erinnerungen
+4. Export/Druck
+5. mehrere Beete
+6. Ernte-Tracker
+7. Fruchtfolge über mehrere Jahre
+8. Premium-Vorlagenpakete
+9. optional KI-Vorschläge
+10. optional Sync oder Webversion
+11. Familien-/Schul-/Kita-/Vereinsmodus
+
+Mögliche Premium-Funktionen später:
+Nicht im MVP umsetzen, aber Architektur nicht dagegen verbauen:
+
+- unbegrenzt viele Beete
+- Profi-Vorlagen
+- Saisonkalender
+- Folgekultur-Vorschläge
+- Export als PDF
+- druckbare Beetpläne
+- Ernte-Statistik
+- Mehrjahresplanung
+- Erinnerungen
+- Familien-/Schul-/Kita-/Vereinsmodus
+
+Qualitätsanforderungen:
+- App startet schnell
+- App funktioniert offline
+- keine abgeschnittenen Texte
+- keine überladenen Screens
+- Raster ist auf dem Smartphone gut bedienbar
+- Feldlabels sind lesbar
+- ausgewähltes Feld ist klar erkennbar
+- lokale Speicherung ist stabil
+- Daten bleiben nach App-Neustart erhalten
+- klare Trennung von UI, Datenmodell, Services und Speicherung
+- keine unnötigen Pakete
+- keine externen Pflichtdienste
+- keine geheimen API-Keys
+- keine generierten Gemüsebilder
+- verständliche README
+
+README.md:
+Erstelle eine README mit:
+
+- Projektbeschreibung
+- Produktpositionierung
+- MVP-Ziel
+- Zielgruppe
+- Setup unter Linux
+- Flutter-Befehle:
+  - flutter pub get
+  - flutter run
+  - flutter build apk
+- Erklärung der lokalen Datenstruktur
+- Hinweis zu /assets/data/plants.json
+- Hinweis zu /assets/data/bed_templates.json
+- Hinweis zu /assets/data/planting_templates.json
+- Hinweis zu /assets/data/season_hints.json
+- Hinweis zu /assets/images
+- Hinweis zu /mockups
+- Erklärung der lokalen Speicherung
+- bewusst nicht umgesetzte Funktionen
+- mögliche nächste Ausbaustufen
+- Lizenzhinweise für verwendete Icons/Assets
+
+Arbeitsweise:
+1. Prüfe zuerst die Mockups im Ordner /mockups.
+2. Leite daraus Designsystem, Layoutprinzipien und Komponenten ab.
+3. Erstelle das Flutter-Projekt.
+4. Implementiere Theme und Bottom Navigation.
+5. Implementiere lokale JSON-Daten:
+   - plants.json
+   - bed_templates.json
+   - planting_templates.json
+   - season_hints.json
+6. Implementiere lokale Speicherung.
+7. Implementiere Startseite mit Dashboard „Diese Woche im Beet“.
+8. Implementiere Beete-Screen mit Beetvorlagen.
+9. Implementiere Formular „Neues Beet“.
+10. Implementiere Beetplaner mit interaktivem Raster.
+11. Implementiere Pflanzenkatalog mit Suche, Kategorien und Feldbedarf.
+12. Implementiere Feld-Detailseite mit Pflanzdokumentation.
+13. Implementiere einfache Plausibilitätsprüfung.
+14. Implementiere einfache Saisonlogik.
+15. Implementiere Demo-Zufallsbelegung.
+16. Implementiere Mehr-Screen.
+17. Schreibe README.
+18. Prüfe, ob die App mit `flutter run` startet.
+
+Akzeptanzkriterium:
+Am Ende liegt ein lauffähiger Android-MVP vor, der sich eng an den Mockups orientiert und die App klar als lokalen, schnellen Hochbeet- und Quadratgarten-Planer positioniert.
+
+Der MVP muss nicht marktfertig monetarisierbar sein. Er soll die Kernannahme testen:
+
+„Brauchen Nutzer eine einfache, lokale, mobile App, mit der sie ihr Hochbeet schnell als Raster planen, Pflanzen passend auf Felder setzen und über einfache saisonale Hinweise im Blick behalten können?“

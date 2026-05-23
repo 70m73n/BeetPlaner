@@ -1,0 +1,38 @@
+[
+  {
+    "id": "raised_120_240",
+    "name": "Hochbeet 120 x 240 cm",
+    "widthCm": 120,
+    "lengthCm": 240,
+    "fieldSizeCm": 30,
+    "orientation": "Süden oben",
+    "description": "Klassisches Hochbeet mit 32 Feldern."
+  },
+  {
+    "id": "raised_80_120",
+    "name": "Hochbeet 80 x 120 cm",
+    "widthCm": 80,
+    "lengthCm": 120,
+    "fieldSizeCm": 40,
+    "orientation": "Süden oben",
+    "description": "Kompaktes Hochbeet für kleine Gärten."
+  },
+  {
+    "id": "balcony_40_100",
+    "name": "Balkonbeet 40 x 100 cm",
+    "widthCm": 40,
+    "lengthCm": 100,
+    "fieldSizeCm": 20,
+    "orientation": "Süden oben",
+    "description": "Schmales Beet für Balkon und Terrasse."
+  },
+  {
+    "id": "herb_60_80",
+    "name": "Kräuterbeet 60 x 80 cm",
+    "widthCm": 60,
+    "lengthCm": 80,
+    "fieldSizeCm": 20,
+    "orientation": "Süden oben",
+    "description": "Kleines Raster für Küchenkräuter."
+  }
+]
