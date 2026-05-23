@@ -6,6 +6,8 @@
   const planner = getContext("planner");
   let { state } = $props();
   let plants = $derived(planner.filteredPlants(state));
+  let bed = $derived(planner.activeBed(state));
+  let targetParcel = $derived(state.catalogTargetParcel);
   const categories = ["Alle", "Gemüse", "Kräuter", "Obst", "Blumen"];
   const icons = { Alle: "▦", Gemüse: "🥬", Kräuter: "🌿", Obst: "🍓", Blumen: "🌼" };
   const filters = [
@@ -13,10 +15,24 @@
     ["quick", "Schnelle Ernte"],
     ["small", "Kleines Feld"]
   ];
+
+  function choosePlant(plantId) {
+    if (targetParcel) {
+      planner.plantFromCatalog(plantId);
+      return;
+    }
+    planner.choosePlantForPlanning(plantId);
+  }
 </script>
 
-<AppHeader title="Pflanzenkatalog" actions={[{ icon: "▤", label: "Filter" }]} />
-<section class="screen with-nav catalog-screen">
+<AppHeader title={targetParcel ? "Pflanze wählen" : "Pflanzenkatalog"} compact={!!targetParcel} back={targetParcel ? () => planner.cancelPlantCatalog() : null} />
+<section class="screen catalog-screen" class:with-nav={!targetParcel}>
+  {#if targetParcel}
+    <article class="catalog-target">
+      <span>▦</span>
+      <div><small>Ziel im Beet</small><strong>Feld {targetParcel} · {bed.name}</strong></div>
+    </article>
+  {/if}
   <label class="search-box">
     <span>⌕</span>
     <input value={state.catalogQuery} placeholder="Pflanzen suchen..." autocomplete="off" oninput={(event) => planner.setCatalogQuery(event.currentTarget.value)} />
@@ -42,10 +58,14 @@
           <h2>{plant.name}</h2>
           <div class="plant-meta"><span>☼ {plant.lightRequirement}</span><span>{plant.nutrientRequirement}</span></div>
           <small>{plant.plantsPerFieldMin}-{plant.plantsPerFieldMax} pro Feld · {plant.harvestDaysMin}-{plant.harvestDaysMax} Tage</small>
-          <button type="button" onclick={() => { planner.setSelectedPlant(plant.id); planner.plantSelectedField(plant.id); planner.go("planner"); }}>Für Feld auswählen ›</button>
+          <button type="button" onclick={() => choosePlant(plant.id)}>
+            {targetParcel ? `In Feld ${targetParcel} pflanzen` : "Im Beet verwenden"} ›
+          </button>
         </div>
       </article>
     {/each}
   </div>
 </section>
-<BottomNav active="catalog" />
+{#if !targetParcel}
+  <BottomNav active="catalog" />
+{/if}

@@ -11,6 +11,8 @@ const initialState = {
   beds: [],
   selectedParcel: "B3",
   selectedPlantId: "tomato",
+  catalogTargetParcel: "",
+  pendingPlantId: "",
   catalogCategory: "Alle",
   catalogQuery: "",
   catalogFilters: [],
@@ -102,7 +104,7 @@ function createPlannerStore() {
     };
   }
   function persist(state) {
-    const { loading, data, toast, ...saved } = state;
+    const { loading, data, toast, catalogTargetParcel, pendingPlantId, ...saved } = state;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
   }
   function loadSaved(data) {
@@ -127,6 +129,7 @@ function createPlannerStore() {
       const loaded = loadSaved(data) || createInitialState(data);
       const urlScreen = new URLSearchParams(location.search).get("screen");
       if (screens.includes(urlScreen)) loaded.screen = urlScreen;
+      ensureSelectedParcel(loaded, activeBed(loaded));
       commit(loaded);
     },
     activeBed,
@@ -136,18 +139,60 @@ function createPlannerStore() {
     freeCount: (bed = activeBed()) => parcelLabels(bed).length - Object.keys(bed?.plantings || {}).length,
     orientationShort,
     go(screen) {
-      commit((state) => ({ ...state, screen }));
+      commit((state) => ({
+        ...state,
+        screen,
+        catalogTargetParcel: "",
+        pendingPlantId: ""
+      }));
       window.scrollTo({ top: 0 });
     },
     selectBed(bedId) {
-      commit((state) => ({ ...state, activeBedId: bedId, screen: "planner" }));
+      commit((state) => {
+        state.activeBedId = bedId;
+        state.screen = "planner";
+        state.catalogTargetParcel = "";
+        state.pendingPlantId = "";
+        ensureSelectedParcel(state, activeBed(state));
+        return state;
+      });
       window.scrollTo({ top: 0 });
     },
     setActiveBed(bedId) {
-      commit((state) => ({ ...state, activeBedId: bedId }));
+      commit((state) => {
+        state.activeBedId = bedId;
+        ensureSelectedParcel(state, activeBed(state));
+        return state;
+      });
     },
     selectParcel(label) {
-      commit((state) => ({ ...state, selectedParcel: label }));
+      if (!snapshot.pendingPlantId) {
+        commit((state) => ({ ...state, selectedParcel: label }));
+        return;
+      }
+      const plantId = snapshot.pendingPlantId;
+      commit((state) => {
+        const bed = activeBed(state);
+        bed.plantings[label] = createPlanting(plantId, toDateInput(/* @__PURE__ */ new Date()), state);
+        bed.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        state.selectedParcel = label;
+        state.selectedPlantId = plantId;
+        state.pendingPlantId = "";
+        return state;
+      });
+      notify(`${findPlant(plantId)?.name || "Pflanze"} in Feld ${label} gesetzt.`);
+    },
+    openParcelDetail(label) {
+      commit((state) => ({ ...state, selectedParcel: label, screen: "detail", pendingPlantId: "", catalogTargetParcel: "" }));
+      window.scrollTo({ top: 0 });
+    },
+    openPlantCatalog() {
+      commit((state) => ({ ...state, catalogTargetParcel: state.selectedParcel, pendingPlantId: "", screen: "catalog" }));
+      window.scrollTo({ top: 0 });
+    },
+    cancelPlantCatalog() {
+      commit((state) => ({ ...state, catalogTargetParcel: "", screen: "planner" }));
+      window.scrollTo({ top: 0 });
     },
     setCatalogQuery(query) {
       commit((state) => ({ ...state, catalogQuery: query }));
@@ -164,12 +209,55 @@ function createPlannerStore() {
     setSelectedPlant(plantId) {
       commit((state) => ({ ...state, selectedPlantId: plantId }));
     },
+    choosePlantForPlanning(plantId) {
+      commit((state) => ({
+        ...state,
+        selectedPlantId: plantId,
+        pendingPlantId: plantId,
+        screen: "planner",
+        catalogTargetParcel: ""
+      }));
+      window.scrollTo({ top: 0 });
+      notify(`${findPlant(plantId)?.name || "Pflanze"} gewählt. Tippe auf ein freies Feld.`);
+    },
+    cancelPendingPlant() {
+      commit((state) => ({ ...state, pendingPlantId: "" }));
+    },
+    plantFromCatalog(plantId) {
+      const label = snapshot.catalogTargetParcel;
+      if (!label) {
+        commit((state) => ({
+          ...state,
+          selectedPlantId: plantId,
+          pendingPlantId: plantId,
+          screen: "planner",
+          catalogTargetParcel: ""
+        }));
+        window.scrollTo({ top: 0 });
+        notify(`${findPlant(plantId)?.name || "Pflanze"} gewählt. Tippe auf ein freies Feld.`);
+        return;
+      }
+      commit((state) => {
+        const bed = activeBed(state);
+        bed.plantings[label] = createPlanting(plantId, toDateInput(/* @__PURE__ */ new Date()), state);
+        bed.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        state.selectedParcel = label;
+        state.selectedPlantId = plantId;
+        state.catalogTargetParcel = "";
+        state.pendingPlantId = "";
+        state.screen = "planner";
+        return state;
+      });
+      window.scrollTo({ top: 0 });
+      notify(`${findPlant(plantId)?.name || "Pflanze"} in Feld ${label} gesetzt.`);
+    },
     plantSelectedField(plantId = snapshot.selectedPlantId) {
       commit((state) => {
         const bed = activeBed(state);
         bed.plantings[state.selectedParcel] = createPlanting(plantId, toDateInput(/* @__PURE__ */ new Date()), state);
         bed.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
         state.selectedPlantId = plantId;
+        state.pendingPlantId = "";
         return state;
       });
       notify(`${findPlant(plantId)?.name || "Pflanze"} in Feld ${snapshot.selectedParcel} gesetzt.`);
@@ -213,6 +301,8 @@ function createPlannerStore() {
         state.beds.unshift(bed);
         state.activeBedId = bed.id;
         state.selectedParcel = "A1";
+        state.catalogTargetParcel = "";
+        state.pendingPlantId = "";
         state.screen = "planner";
         return state;
       });
@@ -230,6 +320,8 @@ function createPlannerStore() {
         state.beds.unshift(bed);
         state.activeBedId = bed.id;
         state.selectedParcel = "A1";
+        state.catalogTargetParcel = "";
+        state.pendingPlantId = "";
         state.screen = "planner";
         return state;
       });
@@ -249,6 +341,8 @@ function createPlannerStore() {
           updatedAt: (/* @__PURE__ */ new Date()).toISOString()
         };
         state.selectedPlantId = plantId;
+        state.pendingPlantId = "";
+        state.catalogTargetParcel = "";
         state.screen = "planner";
         return state;
       });
@@ -257,6 +351,8 @@ function createPlannerStore() {
     deleteDetail() {
       commit((state) => {
         delete activeBed(state).plantings[state.selectedParcel];
+        state.pendingPlantId = "";
+        state.catalogTargetParcel = "";
         state.screen = "planner";
         return state;
       });
@@ -360,6 +456,10 @@ function parcelLabelsFor(bed) {
     const column = index % bed.columns;
     return `${String.fromCharCode(65 + column)}${row}`;
   });
+}
+function ensureSelectedParcel(state, bed) {
+  if (!bed || isValidLabel(state.selectedParcel, bed.rows, bed.columns)) return;
+  state.selectedParcel = "A1";
 }
 function isValidLabel(label, rows, columns) {
   const match = /^([A-Z])(\d+)$/.exec(label);
@@ -548,6 +648,8 @@ function CatalogScreen($$renderer, $$props) {
     const planner = getContext("planner");
     let { state } = $$props;
     let plants = derived(() => planner.filteredPlants(state));
+    let bed = derived(() => planner.activeBed(state));
+    let targetParcel = derived(() => state.catalogTargetParcel);
     const categories = ["Alle", "Gemüse", "Kräuter", "Obst", "Blumen"];
     const icons = {
       Alle: "▦",
@@ -562,10 +664,18 @@ function CatalogScreen($$renderer, $$props) {
       ["small", "Kleines Feld"]
     ];
     AppHeader($$renderer2, {
-      title: "Pflanzenkatalog",
-      actions: [{ icon: "▤", label: "Filter" }]
+      title: targetParcel() ? "Pflanze wählen" : "Pflanzenkatalog",
+      compact: !!targetParcel(),
+      back: targetParcel() ? () => planner.cancelPlantCatalog() : null
     });
-    $$renderer2.push(`<!----> <section class="screen with-nav catalog-screen"><label class="search-box"><span>⌕</span> <input${attr("value", state.catalogQuery)} placeholder="Pflanzen suchen..." autocomplete="off"/> <span>☷</span></label> <div class="chip-row"><!--[-->`);
+    $$renderer2.push(`<!----> <section${attr_class("screen catalog-screen", void 0, { "with-nav": !targetParcel() })}>`);
+    if (targetParcel()) {
+      $$renderer2.push("<!--[0-->");
+      $$renderer2.push(`<article class="catalog-target"><span>▦</span> <div><small>Ziel im Beet</small><strong>Feld ${escape_html(targetParcel())} · ${escape_html(bed().name)}</strong></div></article>`);
+    } else {
+      $$renderer2.push("<!--[-1-->");
+    }
+    $$renderer2.push(`<!--]--> <label class="search-box"><span>⌕</span> <input${attr("value", state.catalogQuery)} placeholder="Pflanzen suchen..." autocomplete="off"/> <span>☷</span></label> <div class="chip-row"><!--[-->`);
     const each_array = ensure_array_like(categories);
     for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
       let category = each_array[$$index];
@@ -581,11 +691,16 @@ function CatalogScreen($$renderer, $$props) {
     const each_array_2 = ensure_array_like(plants());
     for (let $$index_2 = 0, $$length = each_array_2.length; $$index_2 < $$length; $$index_2++) {
       let plant = each_array_2[$$index_2];
-      $$renderer2.push(`<article class="plant-card"><div class="plant-image">${escape_html(plant.icon)}</div> <div class="plant-card-body"><h2>${escape_html(plant.name)}</h2> <div class="plant-meta"><span>☼ ${escape_html(plant.lightRequirement)}</span><span>${escape_html(plant.nutrientRequirement)}</span></div> <small>${escape_html(plant.plantsPerFieldMin)}-${escape_html(plant.plantsPerFieldMax)} pro Feld · ${escape_html(plant.harvestDaysMin)}-${escape_html(plant.harvestDaysMax)} Tage</small> <button type="button">Für Feld auswählen ›</button></div></article>`);
+      $$renderer2.push(`<article class="plant-card"><div class="plant-image">${escape_html(plant.icon)}</div> <div class="plant-card-body"><h2>${escape_html(plant.name)}</h2> <div class="plant-meta"><span>☼ ${escape_html(plant.lightRequirement)}</span><span>${escape_html(plant.nutrientRequirement)}</span></div> <small>${escape_html(plant.plantsPerFieldMin)}-${escape_html(plant.plantsPerFieldMax)} pro Feld · ${escape_html(plant.harvestDaysMin)}-${escape_html(plant.harvestDaysMax)} Tage</small> <button type="button">${escape_html(targetParcel() ? `In Feld ${targetParcel()} pflanzen` : "Im Beet verwenden")} ›</button></div></article>`);
     }
     $$renderer2.push(`<!--]--></div></section> `);
-    BottomNav($$renderer2, { active: "catalog" });
-    $$renderer2.push(`<!---->`);
+    if (!targetParcel()) {
+      $$renderer2.push("<!--[0-->");
+      BottomNav($$renderer2, { active: "catalog" });
+    } else {
+      $$renderer2.push("<!--[-1-->");
+    }
+    $$renderer2.push(`<!--]-->`);
   });
 }
 function BedGrid($$renderer, $$props) {
@@ -616,21 +731,29 @@ function PlannerScreen($$renderer, $$props) {
     let bed = derived(() => planner.activeBed(state));
     let selectedPlanting = derived(() => bed().plantings[state.selectedParcel]);
     let selectedPlant = derived(() => selectedPlanting() ? planner.findPlant(selectedPlanting().plantId) : planner.findPlant(state.selectedPlantId));
+    let pendingPlant = derived(() => state.pendingPlantId ? planner.findPlant(state.pendingPlantId) : null);
     AppHeader($$renderer2, {
       title: "Beet planen",
       compact: true,
       back: () => planner.go("home"),
       actions: [{ icon: "?", label: "Hilfe" }]
     });
-    $$renderer2.push(`<!----> <section class="screen planner-screen"><article class="card planner-card"><div class="planner-topline"><div class="title-lockup"><span class="bed-emoji">🪴</span><div><h2>${escape_html(bed().name)}</h2><p>${escape_html(bed().widthCm)} × ${escape_html(bed().lengthCm)} cm · ${escape_html(bed().fieldSizeCm)} cm Raster</p></div></div> <button class="primary small" type="button">Speichern</button></div> <div class="segmented"><button class="active" type="button">☝ Manuell</button> <button type="button">🎲 Zufall</button> <button type="button">↺ Zurücksetzen</button></div> <div class="direction-chip">Norden ↑</div> `);
+    $$renderer2.push(`<!----> <section class="screen planner-screen"><article class="card planner-card"><div class="planner-topline"><div class="title-lockup"><span class="bed-emoji">🪴</span><div><h2>${escape_html(bed().name)}</h2><p>${escape_html(bed().widthCm)} × ${escape_html(bed().lengthCm)} cm · ${escape_html(bed().fieldSizeCm)} cm Raster</p></div></div> <button class="primary small" type="button">Speichern</button></div> <div class="segmented"><button class="active" type="button">☝ Manuell</button> <button type="button">🎲 Zufall</button> <button type="button">↺ Zurücksetzen</button></div> `);
+    if (pendingPlant()) {
+      $$renderer2.push("<!--[0-->");
+      $$renderer2.push(`<div class="placement-prompt"><span>${escape_html(pendingPlant().icon)}</span> <div><strong>${escape_html(pendingPlant().name)} platzieren</strong><small>Tippe auf ein freies Feld im Beet.</small></div> <button type="button">Abbrechen</button></div>`);
+    } else {
+      $$renderer2.push("<!--[-1-->");
+    }
+    $$renderer2.push(`<!--]--> <div class="selected-field"><div><small>Ausgewähltes Feld</small> <strong>Feld ${escape_html(state.selectedParcel)}</strong> <span>${escape_html(selectedPlanting() ? `${selectedPlant().name} gepflanzt` : "Noch frei")}</span></div> <button class="primary small" type="button">${escape_html(selectedPlanting() ? "Ändern" : "Pflanze wählen")}</button></div> <div class="direction-chip">Norden ↑</div> `);
     BedGrid($$renderer2, { bed: bed(), selectedParcel: state.selectedParcel });
-    $$renderer2.push(`<!----> <div class="direction-chip bottom">${escape_html(planner.orientationShort(bed().orientation))}</div> <div class="plant-strip"><!--[-->`);
+    $$renderer2.push(`<!----> <div class="direction-chip bottom">${escape_html(planner.orientationShort(bed().orientation))}</div> <p class="plant-strip-label">Schnell pflanzen in Feld ${escape_html(state.selectedParcel)}</p> <div class="plant-strip"><!--[-->`);
     const each_array = ensure_array_like(state.data.plants.slice(0, 6));
     for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
       let plant = each_array[$$index];
       $$renderer2.push(`<button type="button"${attr_class("", void 0, { "active": state.selectedPlantId === plant.id })}><span>${escape_html(plant.icon)}</span><small>${escape_html(plant.name)}</small></button>`);
     }
-    $$renderer2.push(`<!--]--></div></article> <article class="hint-card"><strong>${escape_html(state.selectedParcel)}</strong> <span>${escape_html(planner.plausibilityText(state, bed(), state.selectedParcel, selectedPlant()))}</span></article> <div class="planner-actions"><button type="button">＋ Pflanze hinzufügen</button> <button type="button"${attr("disabled", !selectedPlanting(), true)}>✎ Feld bearbeiten</button> <button type="button">⌫ Feld löschen</button></div></section>`);
+    $$renderer2.push(`<!--]--></div></article> <article class="hint-card"><strong>Feld ${escape_html(state.selectedParcel)}</strong> <span>${escape_html(planner.plausibilityText(state, bed(), state.selectedParcel, selectedPlant()))}</span></article> <div class="planner-actions"><button type="button">＋ Pflanze wählen</button> <button type="button"${attr("disabled", !selectedPlanting(), true)}>✎ Feld bearbeiten</button> <button type="button"${attr("disabled", !selectedPlanting(), true)}>⌫ Feld löschen</button></div></section>`);
   });
 }
 function DetailScreen($$renderer, $$props) {

@@ -21,7 +21,7 @@
           class="parcel"
           type="button"
           aria-label={`Feld ${label}`}
-          onclick={() => planner.selectParcel(label)}
+          onclick={() => planting ? planner.openParcelDetail(label) : planner.selectParcel(label)}
         >
           <small>{label}</small><span>{plant?.icon || ""}</span>
         </button>

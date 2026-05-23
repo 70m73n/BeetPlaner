@@ -119,7 +119,7 @@ Work through these items before treating the app as a clean MVP:
 - [ ] Standardize navigation, headers, action icons, buttons, spacing, cards, and empty/error states across all screens.
 - [ ] Finalize the home screen flow: full active bed remains visible on common phone sizes, carousel selection is reliable, and status/season guidance stays secondary to the bed.
 - [ ] Simplify bed creation around clearly named templates first, custom dimensions second, with validation for dimensions and field-size combinations.
-- [ ] Make the planting flow unambiguous: clearly show the selected parcel, avoid silently planting into a stale selection from the catalog, and give immediate confirmation after placing, editing, or deleting a plant.
+- [x] Make the planting flow unambiguous: clearly show the selected parcel, avoid silently planting into a stale selection from the catalog, and give immediate confirmation after placing, editing, or deleting a plant.
 - [ ] Review and normalize local seed content for names, field requirements, harvest information, neighbor guidance, and seasonal hints.
 - [ ] Add loading, empty, and data-load error states for beds, catalog results, and local JSON loading.
 - [ ] Harden local persistence with a state-version/migration strategy before schema changes expand.

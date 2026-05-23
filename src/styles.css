@@ -647,6 +647,46 @@ button {
   background: var(--green-100);
 }
 
+.placement-prompt {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 10px;
+  border: 1px solid #c8dfbd;
+  border-radius: 14px;
+  color: var(--green-900);
+  background: #eef7e9;
+}
+
+.placement-prompt > span {
+  display: grid;
+  height: 42px;
+  place-items: center;
+  border-radius: 11px;
+  background: #deefd7;
+  font-size: 1.65rem;
+}
+
+.placement-prompt strong,
+.placement-prompt small {
+  display: block;
+}
+
+.placement-prompt small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.placement-prompt button {
+  border: 0;
+  color: var(--green-900);
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
 .direction-chip {
   width: max-content;
   margin: 0 auto -3px;
@@ -660,6 +700,44 @@ button {
 
 .direction-chip.bottom {
   margin: -4px auto 10px;
+}
+
+.selected-field {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #d9e8d2;
+  border-radius: 14px;
+  background: #f3f9ef;
+}
+
+.selected-field small,
+.selected-field strong,
+.selected-field span {
+  display: block;
+}
+
+.selected-field small {
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.selected-field strong {
+  color: var(--green-900);
+}
+
+.selected-field span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.selected-field button {
+  flex: 0 0 auto;
 }
 
 .grid-wrap {
@@ -741,6 +819,13 @@ button {
   background: white;
 }
 
+.plant-strip-label {
+  margin: 0 0 7px;
+  color: var(--green-900);
+  font-size: 0.83rem;
+  font-weight: 750;
+}
+
 .plant-strip button {
   display: grid;
   gap: 4px;
@@ -810,6 +895,39 @@ button {
   outline: 0;
   font-size: 1.05rem;
   background: transparent;
+}
+
+.catalog-target {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 11px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 11px 13px;
+  border: 1px solid #d1e4c7;
+  border-radius: 14px;
+  color: var(--green-900);
+  background: #f1f8ec;
+}
+
+.catalog-target > span {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 999px;
+  background: #e0efd8;
+  font-size: 1.3rem;
+}
+
+.catalog-target small,
+.catalog-target strong {
+  display: block;
+}
+
+.catalog-target small {
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 .chip-row {

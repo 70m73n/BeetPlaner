@@ -11,6 +11,8 @@ const initialState = {
   beds: [],
   selectedParcel: "B3",
   selectedPlantId: "tomato",
+  catalogTargetParcel: "",
+  pendingPlantId: "",
   catalogCategory: "Alle",
   catalogQuery: "",
   catalogFilters: [],
@@ -116,7 +118,7 @@ export function createPlannerStore() {
   }
 
   function persist(state) {
-    const { loading, data, toast, ...saved } = state;
+    const { loading, data, toast, catalogTargetParcel, pendingPlantId, ...saved } = state;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
   }
 
@@ -144,6 +146,7 @@ export function createPlannerStore() {
       const loaded = loadSaved(data) || createInitialState(data);
       const urlScreen = new URLSearchParams(location.search).get("screen");
       if (screens.includes(urlScreen)) loaded.screen = urlScreen;
+      ensureSelectedParcel(loaded, activeBed(loaded));
       commit(loaded);
     },
 
@@ -155,21 +158,66 @@ export function createPlannerStore() {
     orientationShort,
 
     go(screen) {
-      commit((state) => ({ ...state, screen }));
+      commit((state) => ({
+        ...state,
+        screen,
+        catalogTargetParcel: "",
+        pendingPlantId: ""
+      }));
       window.scrollTo({ top: 0 });
     },
 
     selectBed(bedId) {
-      commit((state) => ({ ...state, activeBedId: bedId, screen: "planner" }));
+      commit((state) => {
+        state.activeBedId = bedId;
+        state.screen = "planner";
+        state.catalogTargetParcel = "";
+        state.pendingPlantId = "";
+        ensureSelectedParcel(state, activeBed(state));
+        return state;
+      });
       window.scrollTo({ top: 0 });
     },
 
     setActiveBed(bedId) {
-      commit((state) => ({ ...state, activeBedId: bedId }));
+      commit((state) => {
+        state.activeBedId = bedId;
+        ensureSelectedParcel(state, activeBed(state));
+        return state;
+      });
     },
 
     selectParcel(label) {
-      commit((state) => ({ ...state, selectedParcel: label }));
+      if (!snapshot.pendingPlantId) {
+        commit((state) => ({ ...state, selectedParcel: label }));
+        return;
+      }
+      const plantId = snapshot.pendingPlantId;
+      commit((state) => {
+        const bed = activeBed(state);
+        bed.plantings[label] = createPlanting(plantId, toDateInput(new Date()), state);
+        bed.updatedAt = new Date().toISOString();
+        state.selectedParcel = label;
+        state.selectedPlantId = plantId;
+        state.pendingPlantId = "";
+        return state;
+      });
+      notify(`${findPlant(plantId)?.name || "Pflanze"} in Feld ${label} gesetzt.`);
+    },
+
+    openParcelDetail(label) {
+      commit((state) => ({ ...state, selectedParcel: label, screen: "detail", pendingPlantId: "", catalogTargetParcel: "" }));
+      window.scrollTo({ top: 0 });
+    },
+
+    openPlantCatalog() {
+      commit((state) => ({ ...state, catalogTargetParcel: state.selectedParcel, pendingPlantId: "", screen: "catalog" }));
+      window.scrollTo({ top: 0 });
+    },
+
+    cancelPlantCatalog() {
+      commit((state) => ({ ...state, catalogTargetParcel: "", screen: "planner" }));
+      window.scrollTo({ top: 0 });
     },
 
     setCatalogQuery(query) {
@@ -193,12 +241,58 @@ export function createPlannerStore() {
       commit((state) => ({ ...state, selectedPlantId: plantId }));
     },
 
+    choosePlantForPlanning(plantId) {
+      commit((state) => ({
+        ...state,
+        selectedPlantId: plantId,
+        pendingPlantId: plantId,
+        screen: "planner",
+        catalogTargetParcel: ""
+      }));
+      window.scrollTo({ top: 0 });
+      notify(`${findPlant(plantId)?.name || "Pflanze"} gewählt. Tippe auf ein freies Feld.`);
+    },
+
+    cancelPendingPlant() {
+      commit((state) => ({ ...state, pendingPlantId: "" }));
+    },
+
+    plantFromCatalog(plantId) {
+      const label = snapshot.catalogTargetParcel;
+      if (!label) {
+        commit((state) => ({
+          ...state,
+          selectedPlantId: plantId,
+          pendingPlantId: plantId,
+          screen: "planner",
+          catalogTargetParcel: ""
+        }));
+        window.scrollTo({ top: 0 });
+        notify(`${findPlant(plantId)?.name || "Pflanze"} gewählt. Tippe auf ein freies Feld.`);
+        return;
+      }
+      commit((state) => {
+        const bed = activeBed(state);
+        bed.plantings[label] = createPlanting(plantId, toDateInput(new Date()), state);
+        bed.updatedAt = new Date().toISOString();
+        state.selectedParcel = label;
+        state.selectedPlantId = plantId;
+        state.catalogTargetParcel = "";
+        state.pendingPlantId = "";
+        state.screen = "planner";
+        return state;
+      });
+      window.scrollTo({ top: 0 });
+      notify(`${findPlant(plantId)?.name || "Pflanze"} in Feld ${label} gesetzt.`);
+    },
+
     plantSelectedField(plantId = snapshot.selectedPlantId) {
       commit((state) => {
         const bed = activeBed(state);
         bed.plantings[state.selectedParcel] = createPlanting(plantId, toDateInput(new Date()), state);
         bed.updatedAt = new Date().toISOString();
         state.selectedPlantId = plantId;
+        state.pendingPlantId = "";
         return state;
       });
       notify(`${findPlant(plantId)?.name || "Pflanze"} in Feld ${snapshot.selectedParcel} gesetzt.`);
@@ -248,6 +342,8 @@ export function createPlannerStore() {
         state.beds.unshift(bed);
         state.activeBedId = bed.id;
         state.selectedParcel = "A1";
+        state.catalogTargetParcel = "";
+        state.pendingPlantId = "";
         state.screen = "planner";
         return state;
       });
@@ -266,6 +362,8 @@ export function createPlannerStore() {
         state.beds.unshift(bed);
         state.activeBedId = bed.id;
         state.selectedParcel = "A1";
+        state.catalogTargetParcel = "";
+        state.pendingPlantId = "";
         state.screen = "planner";
         return state;
       });
@@ -286,6 +384,8 @@ export function createPlannerStore() {
           updatedAt: new Date().toISOString()
         };
         state.selectedPlantId = plantId;
+        state.pendingPlantId = "";
+        state.catalogTargetParcel = "";
         state.screen = "planner";
         return state;
       });
@@ -295,6 +395,8 @@ export function createPlannerStore() {
     deleteDetail() {
       commit((state) => {
         delete activeBed(state).plantings[state.selectedParcel];
+        state.pendingPlantId = "";
+        state.catalogTargetParcel = "";
         state.screen = "planner";
         return state;
       });
@@ -424,6 +526,11 @@ function parcelLabelsFor(bed) {
     const column = index % bed.columns;
     return `${String.fromCharCode(65 + column)}${row}`;
   });
+}
+
+function ensureSelectedParcel(state, bed) {
+  if (!bed || isValidLabel(state.selectedParcel, bed.rows, bed.columns)) return;
+  state.selectedParcel = "A1";
 }
 
 function isValidLabel(label, rows, columns) {
