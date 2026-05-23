@@ -231,6 +231,65 @@ button {
   font-size: 2.5rem;
 }
 
+.bed-carousel-wrap {
+  margin-bottom: 16px;
+}
+
+.bed-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.bed-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.bed-slide {
+  flex: 0 0 100%;
+  margin-bottom: 0;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+.bed-slide.active {
+  border-color: rgba(15, 77, 36, 0.18);
+  box-shadow: 0 18px 38px rgba(31, 42, 31, 0.16);
+}
+
+.bed-slide-main {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0 0;
+}
+
+.carousel-dots button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #bfd4b7;
+}
+
+.carousel-dots .active {
+  width: 24px;
+  background: var(--green-900);
+}
+
 .hero-grid {
   display: grid;
   gap: 12px;

@@ -164,6 +164,10 @@ export function createPlannerStore() {
       window.scrollTo({ top: 0 });
     },
 
+    setActiveBed(bedId) {
+      commit((state) => ({ ...state, activeBedId: bedId }));
+    },
+
     selectParcel(label) {
       commit((state) => ({ ...state, selectedParcel: label }));
     },

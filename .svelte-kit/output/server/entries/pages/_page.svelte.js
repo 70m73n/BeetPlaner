@@ -143,6 +143,9 @@ function createPlannerStore() {
       commit((state) => ({ ...state, activeBedId: bedId, screen: "planner" }));
       window.scrollTo({ top: 0 });
     },
+    setActiveBed(bedId) {
+      commit((state) => ({ ...state, activeBedId: bedId }));
+    },
     selectParcel(label) {
       commit((state) => ({ ...state, selectedParcel: label }));
     },
@@ -442,8 +445,8 @@ function HomeScreen($$renderer, $$props) {
     const planner = getContext("planner");
     let { state } = $$props;
     let bed = derived(() => planner.activeBed(state));
-    let hints = derived(() => planner.dashboardHints(state, bed()).slice(0, 3));
-    let recent = derived(() => planner.recentPlantings(state, bed()).slice(0, 4));
+    let hints = derived(() => planner.dashboardHints(state, bed()).slice(0, 2));
+    let activeBedIndex = derived(() => Math.max(0, state.beds.findIndex((item) => item.id === state.activeBedId)));
     function metric(icon, label, value) {
       return { icon, label, value };
     }
@@ -463,29 +466,45 @@ function HomeScreen($$renderer, $$props) {
         }
       ]
     });
-    $$renderer2.push(`<!----> <section class="screen with-nav"><button class="card hero-card tappable as-card" type="button"><div class="card-title-row"><div class="title-lockup"><span class="bed-emoji">🪴</span><div><h2>${escape_html(bed().name)}</h2><p>${escape_html(bed().widthCm)} × ${escape_html(bed().lengthCm)} cm</p></div></div> <span class="chevron">›</span></div> <div class="hero-grid"><div class="metric-list"><!--[-->`);
-    const each_array = ensure_array_like([
-      metric("⌁", "Größe", `${bed().widthCm} × ${bed().lengthCm} cm`),
-      metric("▦", "Feldgröße", `${bed().fieldSizeCm} × ${bed().fieldSizeCm} cm`),
-      metric("☼", "Sonne", planner.orientationShort(bed().orientation))
-    ]);
-    for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
-      let item = each_array[$$index];
-      $$renderer2.push(`<div class="metric"><span>${escape_html(item.icon)}</span><div><small>${escape_html(item.label)}</small><strong>${escape_html(item.value)}</strong></div></div>`);
+    $$renderer2.push(`<!----> <section class="screen with-nav"><div class="bed-carousel-wrap"><div class="bed-carousel" aria-label="Beete"><!--[-->`);
+    const each_array = ensure_array_like(state.beds);
+    for (let index = 0, $$length = each_array.length; index < $$length; index++) {
+      let item = each_array[index];
+      $$renderer2.push(`<article${attr_class("card hero-card bed-slide", void 0, { "active": item.id === state.activeBedId })}${attr("aria-label", `${item.name}, Beet ${index + 1} von ${state.beds.length}`)}><button class="bed-slide-main" type="button"><div class="card-title-row"><div class="title-lockup"><span class="bed-emoji">🪴</span><div><h2>${escape_html(item.name)}</h2><p>${escape_html(item.widthCm)} × ${escape_html(item.lengthCm)} cm</p></div></div> <span class="chevron">›</span></div> <div class="hero-grid">`);
+      BedPreview($$renderer2, {
+        bed: item,
+        selectedParcel: item.id === state.activeBedId ? state.selectedParcel : ""
+      });
+      $$renderer2.push(`<!----> <div class="metric-list" aria-label="Beetdaten"><!--[-->`);
+      const each_array_1 = ensure_array_like([
+        metric("⌁", "Größe", `${item.widthCm} × ${item.lengthCm} cm`),
+        metric("▦", "Raster", `${item.fieldSizeCm} cm`),
+        metric("☼", "Sonne", planner.orientationShort(item.orientation))
+      ]);
+      for (let $$index = 0, $$length2 = each_array_1.length; $$index < $$length2; $$index++) {
+        let metricItem = each_array_1[$$index];
+        $$renderer2.push(`<div class="metric"><span>${escape_html(metricItem.icon)}</span><div><small>${escape_html(metricItem.label)}</small><strong>${escape_html(metricItem.value)}</strong></div></div>`);
+      }
+      $$renderer2.push(`<!--]--></div></div></button></article>`);
     }
     $$renderer2.push(`<!--]--></div> `);
-    BedPreview($$renderer2, { bed: bed(), selectedParcel: state.selectedParcel });
-    $$renderer2.push(`<!----></div></button> <article class="card"><div class="section-heading"><h2>Heute im Beet</h2><button type="button">Alle anzeigen ›</button></div> <div class="task-list"><!--[-->`);
-    const each_array_1 = ensure_array_like(hints());
-    for (let $$index_1 = 0, $$length = each_array_1.length; $$index_1 < $$length; $$index_1++) {
-      let hint = each_array_1[$$index_1];
-      $$renderer2.push(`<button class="task-item" type="button"><span>${escape_html(taskIcon(hint.type))}</span><strong>${escape_html(hint.type)}</strong><small>${escape_html(hint.text)}</small><b>›</b></button>`);
+    if (state.beds.length > 1) {
+      $$renderer2.push("<!--[0-->");
+      $$renderer2.push(`<div class="carousel-dots" aria-label="Beet auswählen"><!--[-->`);
+      const each_array_2 = ensure_array_like(state.beds);
+      for (let index = 0, $$length = each_array_2.length; index < $$length; index++) {
+        let item = each_array_2[index];
+        $$renderer2.push(`<button type="button"${attr("aria-label", `${item.name} anzeigen`)}${attr("aria-current", index === activeBedIndex() ? "true" : void 0)}${attr_class("", void 0, { "active": index === activeBedIndex() })}></button>`);
+      }
+      $$renderer2.push(`<!--]--></div>`);
+    } else {
+      $$renderer2.push("<!--[-1-->");
     }
-    $$renderer2.push(`<!--]--></div></article> <article class="card"><div class="section-heading"><h2>Letzte Pflanzungen</h2><button type="button">Katalog ›</button></div> <div class="recent-row"><!--[-->`);
-    const each_array_2 = ensure_array_like(recent());
-    for (let $$index_2 = 0, $$length = each_array_2.length; $$index_2 < $$length; $$index_2++) {
-      let item = each_array_2[$$index_2];
-      $$renderer2.push(`<button class="recent-card" type="button"><span>${escape_html(item.plant.icon)}</span><strong>${escape_html(item.plant.name)}</strong><small>${escape_html(item.days)}</small></button>`);
+    $$renderer2.push(`<!--]--></div> <article class="card"><div class="section-heading"><h2>Heute im Beet</h2><button type="button">Alle anzeigen ›</button></div> <div class="task-list"><!--[-->`);
+    const each_array_3 = ensure_array_like(hints());
+    for (let $$index_3 = 0, $$length = each_array_3.length; $$index_3 < $$length; $$index_3++) {
+      let hint = each_array_3[$$index_3];
+      $$renderer2.push(`<button class="task-item" type="button"><span>${escape_html(taskIcon(hint.type))}</span><strong>${escape_html(hint.type)}</strong><small>${escape_html(hint.text)}</small><b>›</b></button>`);
     }
     $$renderer2.push(`<!--]--></div></article> <article class="card"><h2>Beetstatus</h2> <div class="status-grid"><div class="status-pill"><span>▦</span><small>Belegte Felder</small><strong>${escape_html(planner.occupiedCount(bed()))} / ${escape_html(planner.parcelLabels(bed()).length)}</strong></div> <div class="status-pill"><span>□</span><small>Freie Felder</small><strong>${escape_html(planner.freeCount(bed()))} / ${escape_html(planner.parcelLabels(bed()).length)}</strong></div> <div class="status-pill"><span>▣</span><small>Nächste Ernte</small><strong>${escape_html(planner.nextHarvestText(state, bed()))}</strong></div></div></article></section> `);
     BottomNav($$renderer2, { active: "home" });
