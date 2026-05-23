@@ -110,6 +110,16 @@ Build a fast, local-first, smartphone-friendly Hochbeet- und Quadratgarten-Plane
 - Do not present placeholder controls or static data as fully implemented product functionality.
 - Keep control icons visually consistent; use plant emoji only as plant imagery.
 
+## Implemented MVP Foundation
+
+These product decisions and workflows are already implemented; keep them intact while completing the remaining MVP work:
+
+- [x] The home screen focuses on the active bed rather than a dashboard header.
+- [x] Bed previews and planner parcels preserve square grid cells.
+- [x] The home screen supports horizontal swiping between multiple beds with dot navigation.
+- [x] The bottom navigation is compact and exposes settings through `Mehr`.
+- [x] The planting flow identifies the target parcel, avoids silent placement from the general catalog, and supports deliberate placement in the planner.
+
 ## Remaining MVP Work
 
 Work through these items before treating the app as a clean MVP:
@@ -117,7 +127,7 @@ Work through these items before treating the app as a clean MVP:
 - [ ] Audit every visible control and remove or implement actions that are currently placeholders, including planner save/help actions, inactive filter/header actions, and settings actions without behavior.
 - [ ] Replace any misleading task language with honest seasonal guidance while hints are based on static monthly local data; use wording such as `Saisonhinweise` until there is a real task engine.
 - [ ] Standardize navigation, headers, action icons, buttons, spacing, cards, and empty/error states across all screens.
-- [ ] Finalize the home screen flow: full active bed remains visible on common phone sizes, carousel selection is reliable, and status/season guidance stays secondary to the bed.
+- [ ] Complete home screen QA at `360px`, `390px`, and `430px`: verify the full active bed remains visible, multi-bed swipe and dot selection remain reliable, and status/season guidance stays secondary.
 - [ ] Simplify bed creation around clearly named templates first, custom dimensions second, with validation for dimensions and field-size combinations.
 - [x] Make the planting flow unambiguous: clearly show the selected parcel, avoid silently planting into a stale selection from the catalog, and give immediate confirmation after placing, editing, or deleting a plant.
 - [ ] Review and normalize local seed content for names, field requirements, harvest information, neighbor guidance, and seasonal hints.
@@ -147,3 +157,11 @@ Before declaring the MVP ready, verify that a new user can complete these workfl
 - [ ] Reload the app and find all created beds and plantings intact.
 - [ ] Reopen the installed/offline app without network access.
 - [ ] Use the app on a phone without clipped beds, obscured controls, or nonfunctional visible buttons.
+
+## Next Commit-Sized Task
+
+Make the interface truthful before adding more capability:
+
+- Remove or implement visible placeholder actions in the planner, catalog headers, and settings screen.
+- Rename `Heute im Beet` to `Saisonhinweise` while recommendations are generated from static local monthly data.
+- Confirm the changed flow on a smartphone-sized viewport and run `npm run build`.
