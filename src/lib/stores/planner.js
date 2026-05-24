@@ -353,14 +353,18 @@ export function createPlannerStore() {
     },
 
     createCustomBed(formData) {
+      const template = {
+        widthCm: Number(formData.get("widthCm") || 120),
+        lengthCm: Number(formData.get("lengthCm") || 240),
+        fieldSizeCm: Number(formData.get("fieldSizeCm") || 30),
+        orientation: String(formData.get("orientation") || "Süden oben")
+      };
+      const error = validateCustomBed(template);
+      if (error) return error;
+
       commit((state) => {
-        const template = {
-          widthCm: Number(formData.get("widthCm") || 120),
-          lengthCm: Number(formData.get("lengthCm") || 240),
-          fieldSizeCm: Number(formData.get("fieldSizeCm") || 30),
-          orientation: String(formData.get("orientation") || "Süden oben")
-        };
-        const bed = createBedFromTemplate(template, String(formData.get("name") || "Neues Beet"), null, state);
+        const name = String(formData.get("name") || "").trim() || "Neues Beet";
+        const bed = createBedFromTemplate(template, name, null, state);
         state.beds.unshift(bed);
         state.activeBedId = bed.id;
         state.selectedParcel = "A1";
@@ -370,6 +374,7 @@ export function createPlannerStore() {
         return state;
       });
       notify("Neues Beet angelegt.");
+      return "";
     },
 
     saveDetail(formData) {
@@ -556,6 +561,22 @@ function isValidLabel(label, rows, columns) {
   const column = match[1].charCodeAt(0) - 64;
   const row = Number(match[2]);
   return column >= 1 && column <= columns && row >= 1 && row <= rows;
+}
+
+function validateCustomBed({ widthCm, lengthCm, fieldSizeCm }) {
+  if (![widthCm, lengthCm, fieldSizeCm].every(Number.isInteger) || widthCm < 20 || lengthCm < 20) {
+    return "Bitte gib gültige Beetmaße ein.";
+  }
+  if (![20, 30, 40].includes(fieldSizeCm)) {
+    return "Bitte wähle eine gültige Feldgröße.";
+  }
+  if (widthCm < fieldSizeCm || lengthCm < fieldSizeCm) {
+    return "Das Beet muss mindestens ein vollständiges Feld enthalten.";
+  }
+  if (widthCm % fieldSizeCm !== 0 || lengthCm % fieldSizeCm !== 0) {
+    return `Die Maße müssen ohne Rest durch ${fieldSizeCm} cm teilbar sein.`;
+  }
+  return "";
 }
 
 function categoryDetail(plant) {
