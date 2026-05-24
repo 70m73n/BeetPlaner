@@ -188,7 +188,8 @@ export function createPlannerStore() {
     },
 
     selectParcel(label) {
-      if (!snapshot.pendingPlantId) {
+      const hasPlanting = Boolean(activeBed(snapshot)?.plantings[label]);
+      if (!snapshot.pendingPlantId || hasPlanting) {
         commit((state) => ({ ...state, selectedParcel: label }));
         return;
       }
@@ -473,7 +474,7 @@ function filteredPlants(state) {
 }
 
 function plausibilityText(state, bed, label, plant) {
-  if (!plant) return "Wähle eine Pflanze aus der Leiste oder aus dem Katalog.";
+  if (!plant) return "Wähle eine Pflanze aus dem Katalog, um Hinweise zur Eignung zu sehen.";
   const month = new Date().getMonth() + 1;
   const messages = [];
   if (plant.recommendedFieldSizeCm > bed.fieldSizeCm) messages.push("Für dieses Feld eher zu groß.");

@@ -1,0 +1,592 @@
+# Auftrag: BeetPlaner UX-Optimierung in mehreren Sprints
+
+## Rolle
+
+Du bist ein erfahrener SvelteKit-Entwickler, UX/UI-Designer und Produktentwickler für mobile Progressive Web Apps.
+
+Du arbeitest an der bestehenden App **BeetPlaner** im Repository:
+
+https://github.com/70m73n/BeetPlaner
+
+Die App ist eine lokale/offline nutzbare SvelteKit-PWA für die einfache Planung kleiner Hochbeete und Quadratgärten. Sie soll bewusst keine überladene Garten-App werden, sondern ein einfacher, schneller und verständlicher Beetplaner für Anfänger, Hochbeet-Nutzer, Balkon- und Terrassengärtner.
+
+## Übergeordnetes Ziel
+
+Optimiere die App so, dass der zentrale Workflow intuitiv, ruhig und selbsterklärend wird:
+
+**App öffnen → Beet sehen → Feld antippen → Pflanze wählen → Pflanzung bestätigen → Feld ist bepflanzt → später wiederfinden/bearbeiten**
+
+Der Fokus liegt nicht auf neuen Funktionen, sondern zuerst auf Bedienbarkeit, Klarheit und Nutzerführung.
+
+Die App soll sich weiterhin als MVP anfühlen, aber deutlich durchdachter und nutzbarer werden.
+
+## Technischer Rahmen
+
+- Framework: SvelteKit
+- Sprache: JavaScript/Svelte
+- Styling: bestehendes CSS weiterverwenden und gezielt verbessern
+- Speicherung: weiterhin `localStorage`
+- Keine Cloud
+- Kein Login
+- Keine KI-Funktionen
+- Keine externen APIs
+- Keine komplexen Bildassets
+- Pflanzen weiterhin mit Emojis oder einfachen Icons
+- Bestehende Datenstruktur möglichst erhalten
+- Keine großen Architekturbrüche, wenn nicht zwingend nötig
+
+Wichtige bestehende Dateien:
+
+- `src/routes/+page.svelte`
+- `src/lib/stores/planner.js`
+- `src/lib/components/HomeScreen.svelte`
+- `src/lib/components/PlannerScreen.svelte`
+- `src/lib/components/BedGrid.svelte`
+- `src/lib/components/CatalogScreen.svelte`
+- `src/lib/components/BedsScreen.svelte`
+- `src/lib/components/DetailScreen.svelte`
+- `src/lib/components/BottomNav.svelte`
+- `src/styles.css`
+
+---
+
+# Sprint 1: Kernworkflow im Planer glätten
+
+## Ziel
+
+Der Planer soll nicht mehr wie ein Werkzeugkasten wirken, sondern wie ein geführter Arbeitsbereich. Der Nutzer muss jederzeit verstehen:
+
+- Welches Beet ist offen?
+- Welches Feld ist ausgewählt?
+- Ist das Feld frei oder belegt?
+- Was ist jetzt der nächste sinnvolle Schritt?
+
+## Anforderungen
+
+### 1. Planer neu strukturieren
+
+Baue `PlannerScreen.svelte` so um, dass die visuelle Reihenfolge klarer wird:
+
+1. Kopfbereich mit Beetname und Basisdaten
+2. Beet-Raster
+3. Kontextkarte zum ausgewählten Feld
+4. Hauptaktionen
+5. Hinweise/Plausibilität
+
+Die Kontextkarte ist der zentrale Bedienbereich.
+
+### 2. Speichern-Button entfernen
+
+Im Planer gibt es aktuell einen Button „Speichern“. Entferne ihn, weil die App automatisch lokal speichert.
+
+Stattdessen klein und unaufdringlich anzeigen:
+
+„Änderungen werden automatisch gespeichert.“
+
+### 3. Ausgewähltes Feld klar darstellen
+
+Wenn ein freies Feld ausgewählt ist:
+
+- Titel: `Feld A1 ist frei`
+- Text: `Wähle eine Pflanze aus, um dieses Feld zu bepflanzen.`
+- Hauptbutton: `Pflanze auswählen`
+
+Wenn ein belegtes Feld ausgewählt ist:
+
+- Titel: `Feld A1`
+- Pflanze mit Icon/Emoji und Name anzeigen
+- Zusatzdaten anzeigen, falls vorhanden:
+  - Pflanzdatum
+  - Anzahl
+  - Sorte, falls vorhanden
+- Hauptbutton: `Bearbeiten`
+- Nebenaktionen:
+  - `Ersetzen`
+  - `Löschen`
+
+### 4. Verhalten beim Antippen von Feldern ändern
+
+Aktuell öffnet ein belegtes Feld direkt die Detailansicht. Das soll geändert werden.
+
+Neues Verhalten:
+
+- Antippen eines freien Feldes: Feld wird ausgewählt, Kontextkarte zeigt „frei“
+- Antippen eines belegten Feldes: Feld wird ausgewählt, Kontextkarte zeigt Pflanzung
+- Detailansicht öffnet sich erst durch Button `Bearbeiten`
+
+Dazu ggf. `BedGrid.svelte` und Store-Methoden anpassen.
+
+### 5. Schnellpflanzen entschärfen
+
+Die aktuelle Schnellpflanzen-Leiste soll nicht mehr dauerhaft prominent angezeigt werden.
+
+Option A:
+- komplett entfernen
+
+Option B:
+- einklappbar unter „Schnellwahl anzeigen“
+
+Für diesen Sprint bevorzugt: entfernen oder klar nachrangig machen.
+
+### 6. Zufall und Zurücksetzen nachrangig machen
+
+Die Buttons `Zufall` und `Zurücksetzen` dürfen bleiben, sollen aber nicht gleichwertig neben dem manuellen Hauptworkflow stehen.
+
+Besser:
+
+- kleiner Bereich „Testfunktionen“
+- oder unter einem Menü/sekundären Button
+- `Zurücksetzen` weiterhin mit Sicherheitsabfrage
+
+## Akzeptanzkriterien Sprint 1
+
+- Ich kann ein Beet öffnen und sehe sofort das Raster.
+- Ich tippe ein freies Feld an und sehe eindeutig, dass es frei ist.
+- Ich habe genau eine offensichtliche Hauptaktion: `Pflanze auswählen`.
+- Ich tippe ein belegtes Feld an und lande nicht sofort in einer anderen Ansicht.
+- Ich kann ein belegtes Feld bewusst bearbeiten, ersetzen oder löschen.
+- Es gibt keinen irreführenden Speichern-Button mehr.
+- Die App wirkt ruhiger und klarer.
+
+---
+
+# Sprint 2: Pflanzenauswahl als geführten Auswahlprozess verbessern
+
+## Ziel
+
+Der Katalog soll nicht nur eine Liste sein, sondern eine klare Auswahlhilfe. Der Nutzer muss verstehen, ob er gerade allgemein stöbert oder eine Pflanze für ein konkretes Feld auswählt.
+
+## Anforderungen
+
+### 1. Zwei Modi klar unterscheiden
+
+Der Katalog hat zwei Nutzungssituationen:
+
+#### Modus A: Allgemeiner Pflanzenkatalog
+
+Titel:
+
+`Pflanzenkatalog`
+
+Nutzung:
+- stöbern
+- Pflanzen ansehen
+- Filter nutzen
+- später im Beet verwenden
+
+#### Modus B: Pflanze für Feld auswählen
+
+Titel:
+
+`Pflanze für Feld A1 auswählen`
+
+Zusatzanzeige:
+
+`Beet: Hochbeet 1 · Feldgröße: 30 × 30 cm`
+
+Button zurück:
+
+`Ohne Auswahl zurück`
+
+Dieser Modus wird geöffnet, wenn der Nutzer im Planer bei einem freien Feld auf `Pflanze auswählen` klickt oder bei einem belegten Feld `Ersetzen` wählt.
+
+### 2. Pflanzenkarten verständlicher machen
+
+Jede Pflanzenkarte soll zeigen:
+
+- Emoji/Icon
+- Pflanzenname
+- Kategorie
+- Lichtbedarf
+- ungefährer Erntezeitraum
+- Pflanzen pro Feld
+- kurze Eignungsbewertung für das aktuelle Feld, falls Ziel-Feld vorhanden
+
+Beispiele:
+
+- `Passt gut für dieses Feld`
+- `Für Anfänger geeignet`
+- `Eher groß für dieses Raster`
+- `Aktuell nicht idealer Pflanzmonat`
+
+Diese Bewertung darf aus vorhandenen Daten abgeleitet werden. Keine komplexe Optimierung bauen.
+
+### 3. Hauptaktion klar formulieren
+
+Im Feld-Auswahlmodus:
+
+Button:
+
+`In Feld A1 pflanzen`
+
+Im allgemeinen Katalogmodus:
+
+Button:
+
+`Im Beet verwenden`
+
+Wenn `Im Beet verwenden` gewählt wird, soll die App zurück in den Planer wechseln und den Nutzer auffordern:
+
+`Tomate gewählt. Tippe auf ein freies Feld.`
+
+### 4. Filter beibehalten, aber visuell beruhigen
+
+Die vorhandenen Filter sind gut:
+
+- Anfängerfreundlich
+- Schnelle Ernte
+- Kleines Feld
+
+Diese sollen bleiben, aber nicht zu viel Platz einnehmen. Sie können als Chips bleiben.
+
+### 5. Suche verbessern
+
+Die Suche soll klar bleiben:
+
+Placeholder:
+
+`Pflanze suchen`
+
+Wenn keine Ergebnisse gefunden werden:
+
+`Keine passende Pflanze gefunden. Entferne Filter oder ändere die Suche.`
+
+## Akzeptanzkriterien Sprint 2
+
+- Ich erkenne sofort, ob ich stöbere oder für ein konkretes Feld auswähle.
+- Ich kann für ein Feld eine Pflanze auswählen und lande danach wieder im Planer.
+- Ich bekomme eine einfache Entscheidungshilfe, ob die Pflanze passt.
+- Keine Ergebnisse werden verständlich erklärt.
+- Der Katalog wirkt nicht überladen.
+
+---
+
+# Sprint 3: Beete anlegen vereinfachen
+
+## Ziel
+
+Das Anlegen eines Beets soll anfängerfreundlicher werden. Nutzer sollen nicht zuerst technische Maße eingeben müssen, sondern mit Vorlagen starten können.
+
+## Anforderungen
+
+### 1. Beete-Seite umsortieren
+
+In `BedsScreen.svelte` soll die Reihenfolge geändert werden:
+
+1. Meine Beete
+2. Vorlage wählen
+3. Eigenes Beet anlegen
+
+Aktuell steht das eigene Beet zu früh und wirkt technisch.
+
+### 2. Vorlagen stärker machen
+
+Die Vorlagen sollen visuell klarer werden:
+
+- Name
+- Maße
+- kurze Beschreibung
+- Empfehlung, z. B.:
+  - `Empfohlen für Anfänger`
+  - `Gut für Balkon`
+  - `Standard-Hochbeet`
+
+Der Button soll eindeutig sein:
+
+`Diese Vorlage nutzen`
+
+### 3. Eigenes Beet als Expertenoption formulieren
+
+Der Bereich für eigene Maße soll ruhiger formuliert werden:
+
+Titel:
+
+`Eigenes Beet anlegen`
+
+Untertitel:
+
+`Nutze diese Option, wenn dein Beet andere Maße hat.`
+
+Felder:
+
+- Beetname
+- Breite
+- Länge
+- Rastergröße
+- Ausrichtung
+
+Button:
+
+`Eigenes Raster anlegen`
+
+### 4. Nach Anlage direkt in den Planer
+
+Nach dem Anlegen eines Beets soll die App direkt in den Planer wechseln und das neue Beet aktiv sein.
+
+Das ist teilweise bereits vorhanden, soll aber stabil geprüft werden.
+
+### 5. Leerer Zustand
+
+Falls künftig keine Beete vorhanden sind, soll ein Empty State möglich sein:
+
+`Noch kein Beet angelegt`
+
+Button:
+
+`Erstes Beet anlegen`
+
+## Akzeptanzkriterien Sprint 3
+
+- Ich sehe zuerst meine vorhandenen Beete.
+- Ich kann schnell eine Vorlage auswählen.
+- Eigene Maße wirken wie eine bewusste Zusatzoption, nicht wie der Standardweg.
+- Nach dem Anlegen lande ich direkt im neuen Beet.
+- Die Beete-Seite wirkt weniger technisch.
+
+---
+
+# Sprint 4: Startseite als Tagescockpit schärfen
+
+## Ziel
+
+Die Startseite soll nicht alles zeigen, sondern die wichtigste Orientierung geben:
+
+- Welches Beet ist aktiv?
+- Was steht heute an?
+- Was ist der nächste sinnvolle Schritt?
+
+## Anforderungen
+
+### 1. Hauptaktion klar anzeigen
+
+Auf der Startseite soll es eine dominante Hauptaktion geben:
+
+`Aktives Beet öffnen`
+
+Diese führt direkt in den Planer.
+
+### 2. Beet-Karte beibehalten, aber vereinfachen
+
+Die Beet-Vorschau ist sinnvoll. Sie soll weiterhin zeigen:
+
+- Beetname
+- Maße
+- Vorschau des Rasters
+- belegte/freie Felder
+
+Wenn mehrere Beete vorhanden sind, darf das Karussell bleiben. Es muss aber ruhig und verständlich bleiben.
+
+### 3. „Heute im Beet“ verbessern
+
+Die Hinweise sollen als einfache Aufgaben/Hinweise erscheinen.
+
+Beispiele:
+
+- `Freies Feld: Feld B3 kann bepflanzt werden`
+- `Bald ernten: Radieschen in Feld A2`
+- `Saisonhinweis: Basilikum kann jetzt gepflanzt werden`
+
+Jeder Hinweis soll zu einer sinnvollen Aktion führen:
+
+- freies Feld → Planer öffnen und Feld auswählen
+- bald ernten → Feld auswählen
+- allgemeiner Hinweis → Planer oder Katalog
+
+Wenn das technisch zu groß ist, zunächst nur Planer öffnen.
+
+### 4. Beetstatus knapp halten
+
+Der Beetstatus soll bleiben:
+
+- belegte Felder
+- freie Felder
+- nächste Ernte
+
+Keine zusätzlichen Kennzahlen ergänzen.
+
+## Akzeptanzkriterien Sprint 4
+
+- Die Startseite beantwortet sofort: „Was ist mein Beetstatus?“
+- Es gibt eine klare Hauptaktion.
+- Hinweise wirken nützlich, nicht dekorativ.
+- Ich komme schnell in den Planer.
+
+---
+
+# Sprint 5: Detailansicht entschlacken
+
+## Ziel
+
+Die Detailansicht soll nicht wie ein Formularfriedhof wirken, sondern wie eine einfache Bearbeitungsseite für eine Pflanzung.
+
+## Anforderungen
+
+### 1. Kopfbereich vereinfachen
+
+Anzeigen:
+
+- Feldnummer
+- Pflanzenname
+- Icon/Emoji
+- Beetname
+- kleine Beetvorschau optional
+
+### 2. Formular logisch gruppieren
+
+Gruppen:
+
+#### Pflanzung
+
+- Pflanze
+- Gepflanzt am
+- Direktsaat/Jungpflanze
+
+#### Details
+
+- Anzahl
+- Sorte
+- Notiz
+
+### 3. Buttons klar trennen
+
+Primär:
+
+`Änderungen speichern`
+
+Sekundär:
+
+`Zurück`
+
+Gefährlich:
+
+`Pflanzung löschen`
+
+Der Löschen-Button soll visuell deutlich nachrangig und gefährlich dargestellt sein.
+
+### 4. Nach Speichern zurück zum Planer
+
+Nach dem Speichern zurück zum Planer und das Feld bleibt ausgewählt.
+
+## Akzeptanzkriterien Sprint 5
+
+- Ich erkenne sofort, welches Feld ich bearbeite.
+- Das Formular ist logisch gruppiert.
+- Löschen ist möglich, aber nicht versehentlich naheliegend.
+- Nach Speichern lande ich wieder im Beet.
+
+---
+
+# Sprint 6: Kleine UX-Details und Qualität
+
+## Ziel
+
+Die App soll sich stabil, konsistent und vertrauenswürdig anfühlen.
+
+## Anforderungen
+
+### 1. Einheitliche Begriffe
+
+Nutze durchgehend dieselben Begriffe:
+
+- Beet
+- Feld
+- Pflanze
+- Pflanzung
+- Katalog
+- Vorlage
+
+Vermeide wechselnde Begriffe wie Parzelle/Feld, wenn nicht nötig. Bevorzugt: `Feld`.
+
+### 2. Einheitliche Buttonlogik
+
+Primäre Buttons:
+
+- klare Hauptaktion
+- nur eine dominante Hauptaktion pro Kontext
+
+Sekundäre Buttons:
+
+- Bearbeiten
+- Ersetzen
+- Zurück
+
+Gefährliche Buttons:
+
+- Löschen
+- Zurücksetzen
+
+### 3. Toasts prüfen
+
+Toasts sind gut, aber sie sollen nur echte Rückmeldungen geben:
+
+- `Tomate in Feld A1 gesetzt.`
+- `Pflanzung gelöscht.`
+- `Neues Beet angelegt.`
+
+Keine unnötigen Toasts für reine Navigation.
+
+### 4. Mobile Bedienbarkeit prüfen
+
+Achte besonders auf:
+
+- ausreichend große Touchflächen
+- keine zu kleinen Buttons
+- kein horizontales Überlaufen
+- gute Bedienbarkeit mit Daumen
+- Bottom Navigation darf Inhalte nicht verdecken
+
+### 5. Accessibility-Basics
+
+- Buttons mit verständlichen Labels
+- Felder mit Labels
+- Kontraste prüfen
+- Fokuszustände nicht entfernen
+- `aria-labels` bei Rasterfeldern sinnvoll erweitern:
+  - freies Feld: `Feld A1, frei`
+  - belegtes Feld: `Feld A1, Tomate`
+
+## Akzeptanzkriterien Sprint 6
+
+- Die App wirkt sprachlich konsistent.
+- Buttons sind eindeutig.
+- Touchbedienung auf dem Smartphone ist angenehm.
+- Rasterfelder sind verständlicher beschriftet.
+- Es gibt keine offensichtlichen UX-Brüche mehr.
+
+---
+
+# Wichtige Produktgrenzen
+
+Bitte nicht umsetzen:
+
+- Login
+- Cloud-Sync
+- Nutzerkonten
+- KI-Assistent
+- Wetterdaten
+- Push Notifications
+- Shop/Abo
+- komplexe Mischkultur-Automatik
+- mehrjährige Fruchtfolge
+- umfangreiche Pflanzenbildgenerierung
+- unnötige Animationen
+- komplexes Dashboard
+
+Der MVP soll klein, lokal und schnell bleiben.
+
+---
+
+# Erwartetes Vorgehen
+
+Arbeite sprintweise.
+
+Für jeden Sprint:
+
+1. Analysiere kurz die betroffenen Dateien.
+2. Nenne die geplanten Änderungen.
+3. Setze die Änderungen um.
+4. Prüfe, ob die App weiterhin baut.
+5. Führe nach Möglichkeit aus:
+
+```bash
+npm run build

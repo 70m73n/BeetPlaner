@@ -587,6 +587,20 @@ button {
   padding: 16px;
 }
 
+.planner-topline {
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.autosave-note {
+  flex: 0 0 112px;
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+  text-align: right;
+}
+
 .primary,
 .danger,
 .planner-actions button,
@@ -700,6 +714,110 @@ button {
 
 .direction-chip.bottom {
   margin: -4px auto 10px;
+}
+
+.field-context {
+  padding: 18px;
+}
+
+.context-kicker {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.77rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.field-context h2 {
+  margin-bottom: 11px;
+}
+
+.context-copy {
+  margin: 0 0 17px;
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.field-plant {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.field-plant span {
+  display: grid;
+  width: 49px;
+  height: 49px;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--green-100);
+  font-size: 1.9rem;
+}
+
+.field-plant strong {
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+.planting-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 17px;
+}
+
+.planting-meta div {
+  min-width: 0;
+  padding: 9px 10px;
+  border-radius: 11px;
+  background: #f3f7ef;
+}
+
+.planting-meta dt {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.planting-meta dd {
+  overflow: hidden;
+  margin: 3px 0 0;
+  color: var(--green-900);
+  font-size: 0.87rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+}
+
+.context-actions {
+  display: grid;
+  gap: 8px;
+}
+
+.context-actions.occupied {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.context-actions button {
+  min-height: 49px;
+  padding: 10px 13px;
+  border: 1px solid rgba(15, 77, 36, 0.14);
+  border-radius: 13px;
+  background: white;
+  color: var(--green-900);
+  font-weight: 750;
+}
+
+.context-actions .primary {
+  grid-column: 1 / -1;
+  border-color: transparent;
+  color: white;
+  background: linear-gradient(145deg, var(--green-700), var(--green-900));
+  box-shadow: 0 8px 18px rgba(15, 77, 36, 0.22);
+}
+
+.context-actions .danger {
+  color: var(--danger);
 }
 
 .selected-field {
@@ -859,6 +977,62 @@ button {
   padding: 14px 16px;
   color: var(--green-900);
   background: #f1f8ec;
+}
+
+.planner-hint {
+  display: block;
+}
+
+.planner-hint small {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--green-900);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.planner-hint p {
+  margin: 0;
+  color: #37513b;
+  font-size: 0.91rem;
+  line-height: 1.42;
+}
+
+.planner-tools {
+  margin-top: 4px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--muted);
+  background: #fffdf8;
+}
+
+.planner-tools summary {
+  padding: 14px 0;
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.planner-tools div {
+  display: flex;
+  gap: 8px;
+  padding: 0 0 13px;
+}
+
+.planner-tools button {
+  flex: 1;
+  min-height: 43px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--muted);
+  background: white;
+  font-size: 0.83rem;
+  font-weight: 700;
+}
+
+.planner-tools .danger {
+  color: var(--danger);
 }
 
 .planner-actions {
@@ -1246,5 +1420,9 @@ textarea {
 
   .plant-strip {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .planting-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
