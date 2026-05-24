@@ -6,6 +6,7 @@
   const planner = getContext("planner");
   let { state } = $props();
   let bed = $derived(planner.activeBed(state));
+  let isExisting = $derived(Boolean(bed.plantings[state.selectedParcel]));
   let planting = $derived(bed.plantings[state.selectedParcel] || {
     plantId: state.selectedPlantId,
     plantedDate: planner.toDateInput(new Date()),
@@ -17,44 +18,85 @@
   let plant = $derived(planner.findPlant(planting.plantId) || state.data.plants[0]);
 
   function save(event) {
-    planner.saveDetail(new FormData(event.currentTarget.form));
+    event.preventDefault();
+    planner.saveDetail(new FormData(event.currentTarget));
   }
 </script>
 
-<AppHeader title={`Feld ${state.selectedParcel}`} compact back={() => planner.go("planner")} />
+<AppHeader
+  title={isExisting ? "Pflanzung bearbeiten" : "Feld bepflanzen"}
+  compact
+  narrowTitle
+  back={() => planner.go("planner")}
+  backLabel="Zurück zum Beet"
+/>
 <section class="screen detail-screen">
   <article class="card detail-hero">
-    <div class="plant-portrait">{plant.icon}</div>
-    <div>
+    <div class="plant-portrait" aria-hidden="true">{plant.icon}</div>
+    <div class="detail-heading">
+      <p class="detail-kicker">{isExisting ? "Pflanzung in" : "Neue Pflanzung für"} Feld {state.selectedParcel}</p>
       <h2>{plant.name}</h2>
-      <span class="badge">⌁ {plant.category}</span>
-      <p>{planner.categoryDetail(plant)} · {plant.nutrientRequirement}</p>
-      <p>Ernte in ca. {plant.harvestDaysMin}-{plant.harvestDaysMax} Tagen</p>
+      <p>{planner.categoryDetail(plant)} · {plant.lightRequirement}</p>
     </div>
-    <div class="parcel-strip">
-      <span class="round-icon">▦</span>
-      <div><strong>Parzelle {state.selectedParcel}</strong><small>{bed.fieldSizeCm} × {bed.fieldSizeCm} cm</small></div>
+    <div class="field-strip">
+      <div>
+        <strong>Feld {state.selectedParcel}</strong>
+        <small>{bed.name} · {bed.fieldSizeCm} × {bed.fieldSizeCm} cm</small>
+      </div>
       <BedPreview {bed} size="micro" selectedParcel={state.selectedParcel} />
     </div>
   </article>
 
-  <article class="card">
-    <form class="detail-form">
-      <label><span>⚑ Pflanze</span><select name="plantId" value={plant.id}>{#each state.data.plants as item}<option value={item.id}>{item.name}</option>{/each}</select></label>
-      <label><span>▣ Gepflanzt am</span><input type="date" name="plantedDate" value={planting.plantedDate} /></label>
-      <label><span>☘ Direktsaat / Jungpflanze</span><select name="plantingType" value={planting.plantingType}><option>Jungpflanze</option><option>Direktsaat</option></select></label>
-      <label><span># Anzahl</span><input type="number" min="1" max="99" name="count" value={planting.count} /></label>
-      <label><span>◇ Sorte</span><input name="variety" value={planting.variety || ""} placeholder="z. B. San Marzano" /></label>
-      <label><span>☷ Notiz</span><textarea name="note" rows="2" value={planting.note || ""}></textarea></label>
-      <button class="primary full" type="button" onclick={save}>✓ Speichern</button>
+  <article class="card detail-editor">
+    <form class="detail-form" onsubmit={save}>
+      <fieldset class="form-section">
+        <legend>Pflanzung</legend>
+        <label>
+          <span>Pflanze</span>
+          <select name="plantId" value={plant.id}>
+            {#each state.data.plants as item}<option value={item.id}>{item.name}</option>{/each}
+          </select>
+        </label>
+        <label>
+          <span>Gepflanzt am</span>
+          <input type="date" name="plantedDate" value={planting.plantedDate} required />
+        </label>
+        <label>
+          <span>Art der Pflanzung</span>
+          <select name="plantingType" value={planting.plantingType}>
+            <option>Jungpflanze</option>
+            <option>Direktsaat</option>
+          </select>
+        </label>
+      </fieldset>
+      <fieldset class="form-section">
+        <legend>Details</legend>
+        <label>
+          <span>Anzahl</span>
+          <input type="number" min="1" max="99" name="count" value={planting.count} required />
+        </label>
+        <label>
+          <span>Sorte</span>
+          <input name="variety" value={planting.variety || ""} placeholder="z. B. San Marzano" />
+        </label>
+        <label class="note-field">
+          <span>Notiz</span>
+          <textarea name="note" rows="3" value={planting.note || ""} placeholder="Eigene Notiz zur Pflanzung"></textarea>
+        </label>
+      </fieldset>
+      <div class="detail-actions">
+        <button class="primary" type="submit">
+          {isExisting ? "Änderungen speichern" : "Pflanzung speichern"}
+        </button>
+        <button class="secondary" type="button" onclick={() => planner.go("planner")}>Zurück</button>
+      </div>
     </form>
   </article>
 
-  <div class="info-grid">
-    <div class="info-box"><span>☼</span><strong>{plant.lightRequirement}</strong><small>Sonne: {planner.orientationShort(bed.orientation)}</small></div>
-    <div class="info-box"><span>♧</span><strong>{plant.nutrientRequirement}</strong><small>Nährstoffbedarf</small></div>
-    <div class="info-box"><span>☘</span><strong>Guter Nachbar</strong><small>{plant.goodNeighbors.slice(0, 2).join(", ") || "keine Angabe"}</small></div>
-  </div>
-
-  <button class="danger full" type="button" onclick={() => planner.deleteDetail()}>⌫ Pflanzung löschen</button>
+  {#if isExisting}
+    <article class="delete-planting">
+      <p><strong>Pflanzung entfernen</strong><small>Das Feld wird wieder frei.</small></p>
+      <button class="danger" type="button" onclick={() => planner.deleteDetail()}>Pflanzung löschen</button>
+    </article>
+  {/if}
 </section>

@@ -13,7 +13,13 @@
 
 <nav class="bottom-nav" aria-label="Hauptnavigation">
   {#each items as [screen, icon, label]}
-    <button class:active={active === screen} type="button" onclick={() => planner.go(screen)}>
+    <button
+      class:active={active === screen}
+      type="button"
+      aria-current={active === screen ? "page" : undefined}
+      aria-label={`${label} öffnen`}
+      onclick={() => planner.go(screen)}
+    >
       <span>{icon}</span>{label}
     </button>
   {/each}

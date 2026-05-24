@@ -55,14 +55,26 @@
   </label>
   <div class="chip-row">
     {#each categories as category}
-      <button class:active={state.catalogCategory === category} class="chip" type="button" onclick={() => planner.setCatalogCategory(category)}>
+      <button
+        class:active={state.catalogCategory === category}
+        class="chip"
+        type="button"
+        aria-pressed={state.catalogCategory === category}
+        onclick={() => planner.setCatalogCategory(category)}
+      >
         {icons[category]} {category}
       </button>
     {/each}
   </div>
   <div class="chip-row compact">
     {#each filters as [id, label]}
-      <button class:active={state.catalogFilters.includes(id)} class="chip soft" type="button" onclick={() => planner.toggleFilter(id)}>{label}</button>
+      <button
+        class:active={state.catalogFilters.includes(id)}
+        class="chip soft"
+        type="button"
+        aria-pressed={state.catalogFilters.includes(id)}
+        onclick={() => planner.toggleFilter(id)}
+      >{label}</button>
     {/each}
   </div>
   {#if plants.length}

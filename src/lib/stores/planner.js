@@ -305,7 +305,7 @@ export function createPlannerStore() {
         delete activeBed(state).plantings[state.selectedParcel];
         return state;
       });
-      notify(`Feld ${snapshot.selectedParcel} ist frei.`);
+      notify("Pflanzung gelöscht.");
     },
 
     resetBed() {
@@ -349,7 +349,7 @@ export function createPlannerStore() {
         state.screen = "planner";
         return state;
       });
-      notify("Vorlage angelegt.");
+      notify("Neues Beet angelegt.");
     },
 
     createCustomBed(formData) {
@@ -396,7 +396,7 @@ export function createPlannerStore() {
         state.screen = "planner";
         return state;
       });
-      notify("Feld gespeichert.");
+      notify(`Pflanzung in Feld ${snapshot.selectedParcel} gespeichert.`);
     },
 
     deleteDetail() {

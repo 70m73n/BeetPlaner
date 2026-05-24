@@ -17,9 +17,9 @@
   });
 </script>
 
-<main class="app-shell" aria-live="polite">
+<main class="app-shell">
   {#if $planner.loading}
-    <div class="loading-card">BeetPlaner wird geladen...</div>
+    <div class="loading-card" role="status">BeetPlaner wird geladen...</div>
   {:else if $planner.screen === "home"}
     <HomeScreen state={$planner} />
   {:else if $planner.screen === "beds"}
@@ -35,6 +35,6 @@
   {/if}
 
   {#if $planner.toast}
-    <div class="toast">{$planner.toast}</div>
+    <div class="toast" role="status" aria-live="polite">{$planner.toast}</div>
   {/if}
 </main>

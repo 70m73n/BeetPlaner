@@ -21,9 +21,9 @@ Der zentrale Planungsablauf ist bereits geführt umgesetzt:
 3. Im Planer das vollständige Raster sehen und ein freies oder belegtes Feld antippen, ohne den Planungskontext zu verlassen.
 4. Bei einem freien Feld über `Pflanze auswählen` gezielt in den Feld-Auswahlmodus wechseln.
 5. Eine Pflanze anhand von Lichtbedarf, Erntezeitraum, Pflanzenanzahl und einfacher Feldeignung auswählen.
-6. Nach dem Pflanzen zurück im Raster die Pflanzung sehen und belegte Felder bewusst bearbeiten, ersetzen oder löschen.
+6. Nach dem Pflanzen zurück im Raster die Pflanzung sehen, in einer gruppierten Detailansicht bearbeiten und bewusst speichern, ersetzen oder löschen.
 
-Änderungen im Planer werden automatisch in `localStorage` gespeichert. Der allgemeine Pflanzenkatalog bleibt daneben zum Stöbern verfügbar; `Im Beet verwenden` führt mit einer Platzierungsaufforderung in den Planer zurück. Saisonhinweise stammen aus lokalen Monatsdaten und dem aktuellen Beetstatus; sie sind keine Aufgaben, Erinnerungen oder Benachrichtigungen.
+Änderungen im Planer werden automatisch in `localStorage` gespeichert. Der allgemeine Pflanzenkatalog bleibt daneben zum Stöbern verfügbar; `Im Beet verwenden` führt mit einer Platzierungsaufforderung in den Planer zurück. Saisonhinweise stammen aus lokalen Monatsdaten und dem aktuellen Beetstatus; sie sind keine Aufgaben, Erinnerungen oder Benachrichtigungen. Im sichtbaren Workflow heißen Rasterplätze einheitlich `Feld`; Rasterfelder, Filter und Navigation geben ihren Zustand auch für assistive Bedienung aus.
 
 ## UX-Sprint-Stand
 
@@ -31,8 +31,14 @@ Der zentrale Planungsablauf ist bereits geführt umgesetzt:
 - [x] Sprint 2: Allgemeinen Katalog und konkrete Feldauswahl unterscheiden, Pflanzenkarten ergänzen und leere Suchergebnisse erklären.
 - [x] Sprint 3: Beet-Anlage um Vorlagen zuerst und eigene Maße als Zusatzoption strukturieren.
 - [x] Sprint 4: Startseite mit Hauptaktion und ehrlichen Saisonhinweisen schärfen sowie sichtbare Platzhalteraktionen entfernen.
-- [ ] Sprint 5: Detailansicht entschlacken.
-- [ ] Sprint 6: Begriffe, Touchbedienung und Accessibility konsolidieren.
+- [x] Sprint 5: Detailansicht als klare Bearbeitungsseite mit gruppiertem Formular und getrenntem Löschbereich entschlacken.
+- [x] Sprint 6: Begriffe auf `Feld` konsolidieren, mobile Touchziele nachschärfen und Accessibility-Basics für Raster, Filter, Navigation, Fokus und Toasts ergänzen.
+
+## Verifikation Sprint 5/6
+
+- `npm run build` erfolgreich ausgeführt.
+- Bearbeiten, Speichern und Löschen einer vorhandenen Pflanzung im lokalen Browserlauf bei `360px`, `390px` und `430px` erfolgreich geprüft.
+- Die Detailansicht wurde an allen drei Breiten visuell auf lesbare Gruppen, erreichbare Aktionen und fehlendes horizontales Überlaufen kontrolliert.
 
 ## Setup
 

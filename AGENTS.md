@@ -128,12 +128,14 @@ These product decisions and workflows are already implemented; keep them intact 
 - [x] Home guidance is honestly labelled `Saisonhinweise`; concrete bed observations are prioritized before static monthly guidance and the UI explicitly states that these are not reminders.
 - [x] The `Mehr` screen presents autosave, version, and licence details as information rather than placeholder actions, while retaining the real local reset action.
 - [x] Visible nonfunctional header actions identified during the settings audit have been removed from `Mehr` and the field-detail view.
+- [x] The field-detail view is a focused planting editor with `Pflanzung` and `Details` groups, explicit save/back actions, and a separate destructive delete section.
+- [x] Visible raster terminology uses `Feld`, while key controls expose selected/current states, status feedback, visible keyboard focus, and larger mobile touch targets.
 
 ## Remaining MVP Work
 
 Work through these items before treating the app as a clean MVP:
 
-- [ ] Standardize navigation, headers, action icons, buttons, spacing, cards, and empty/error states across all screens.
+- [ ] Complete residual cross-screen normalization of headers, action icons, spacing, cards, and empty/error states after the field-detail/button/accessibility pass.
 - [ ] Complete multi-bed home-screen QA: verify swipe and dot selection remain reliable after adding several beds, including at `360px`, `390px`, and `430px`.
 - [ ] Review and normalize local seed content for names, field requirements, harvest information, neighbor guidance, and seasonal hints.
 - [ ] Add loading, empty, and data-load error states for beds and local JSON loading. Catalog no-results feedback is already implemented.
@@ -165,10 +167,8 @@ Before declaring the MVP ready, verify that a new user can complete these workfl
 
 ## Next Commit-Sized Task
 
-Continue the UX sprint sequence with the field-detail view:
+Continue the MVP hardening sequence with persistence and local-data states:
 
-- Simplify `DetailScreen.svelte` into a clear edit page for an existing planting and a deliberate form for a new one.
-- Reduce visual density around plant metadata, keep `Speichern` and `Pflanzung löschen` unambiguous, and avoid introducing placeholder actions.
-- Verify edit/save/delete flows at smartphone dimensions and run `npm run build`.
-
-After that sprint, continue terminology, touch-target, and accessibility consolidation, then address persistence migrations, loading/error handling, and offline verification before declaring the MVP clean.
+- Add an explicit persisted-state version and migration path before further schema changes.
+- Add honest loading, empty, and local JSON load-error handling without introducing remote dependencies.
+- Preserve the now-verified field edit/save/delete workflow and rerun mobile/offline checks after the state changes.
