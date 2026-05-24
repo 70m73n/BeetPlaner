@@ -7,7 +7,7 @@ This repository contains a SvelteKit Progressive Web App for a local raised-bed 
 - `src/routes/+page.svelte` is the app entry point and switches between the main screens.
 - `src/routes/+layout.js` configures SvelteKit for client-side/static PWA behavior.
 - `src/lib/components/` contains reusable Svelte components and top-level screen components.
-- `src/lib/stores/planner.js` contains app state, local persistence, grid logic, dashboard hints, season logic, and mutations.
+- `src/lib/stores/planner.js` contains app state, local persistence, grid logic, seasonal guidance, and mutations.
 - `src/styles.css` contains the main responsive mobile design system.
 - `src/lib/styles.css` imports the global stylesheet for SvelteKit.
 - `src/service-worker.js` implements the PWA offline cache.
@@ -123,17 +123,18 @@ These product decisions and workflows are already implemented; keep them intact 
 - [x] The planner communicates automatic local saving and moves demo/reset controls into secondary `Testfunktionen`.
 - [x] The catalog distinguishes general browsing from selection for a specific field, including field-size context and a deliberate cancel path.
 - [x] Catalog cards expose simple suitability guidance from existing local data and show a clear no-results state.
+- [x] Bed creation presents named templates before a secondary custom-dimensions form, rejects dimensions that do not fit the selected raster, and opens newly created beds directly in the planner.
+- [x] The home screen exposes a primary `Aktives Beet öffnen` action, keeps the complete active-bed preview visible at `360px`, `390px`, and `430px`, and displays compact occupancy status.
+- [x] Home guidance is honestly labelled `Saisonhinweise`; concrete bed observations are prioritized before static monthly guidance and the UI explicitly states that these are not reminders.
+- [x] The `Mehr` screen presents autosave, version, and licence details as information rather than placeholder actions, while retaining the real local reset action.
+- [x] Visible nonfunctional header actions identified during the settings audit have been removed from `Mehr` and the field-detail view.
 
 ## Remaining MVP Work
 
 Work through these items before treating the app as a clean MVP:
 
-- [ ] Finish auditing visible placeholder actions outside the planner/catalog changes already completed, especially settings actions without behavior.
-- [ ] Replace any misleading task language with honest seasonal guidance while hints are based on static monthly local data; use wording such as `Saisonhinweise` until there is a real task engine.
 - [ ] Standardize navigation, headers, action icons, buttons, spacing, cards, and empty/error states across all screens.
-- [ ] Complete home screen QA at `360px`, `390px`, and `430px`: verify the full active bed remains visible, multi-bed swipe and dot selection remain reliable, and status/season guidance stays secondary.
-- [ ] Simplify bed creation around clearly named templates first, custom dimensions second, with validation for dimensions and field-size combinations.
-- [x] Make the planting flow unambiguous: clearly show the selected parcel, avoid silently planting into a stale selection from the catalog, and give immediate confirmation after placing, editing, or deleting a plant.
+- [ ] Complete multi-bed home-screen QA: verify swipe and dot selection remain reliable after adding several beds, including at `360px`, `390px`, and `430px`.
 - [ ] Review and normalize local seed content for names, field requirements, harvest information, neighbor guidance, and seasonal hints.
 - [ ] Add loading, empty, and data-load error states for beds and local JSON loading. Catalog no-results feedback is already implemented.
 - [ ] Harden local persistence with a state-version/migration strategy before schema changes expand.
@@ -155,7 +156,7 @@ Do not add these until the core planning workflow has been tested and is stable:
 
 Before declaring the MVP ready, verify that a new user can complete these workflows without explanation:
 
-- [ ] Create a bed from a template and create a custom bed.
+- [x] Create a bed from a template and create a custom bed.
 - [ ] Switch between multiple beds on the home screen by swiping.
 - [ ] Open a bed, select a parcel, place a plant, edit it, and delete it.
 - [ ] Reload the app and find all created beds and plantings intact.
@@ -164,10 +165,10 @@ Before declaring the MVP ready, verify that a new user can complete these workfl
 
 ## Next Commit-Sized Task
 
-Continue the UX sprint sequence with bed creation:
+Continue the UX sprint sequence with the field-detail view:
 
-- Reorder `BedsScreen.svelte` so existing beds and templates precede custom dimensions.
-- Strengthen template labels and make custom dimensions a deliberate secondary option.
-- Verify that newly created beds open directly in the planner, then confirm the flow at smartphone dimensions and run `npm run build`.
+- Simplify `DetailScreen.svelte` into a clear edit page for an existing planting and a deliberate form for a new one.
+- Reduce visual density around plant metadata, keep `Speichern` and `Pflanzung löschen` unambiguous, and avoid introducing placeholder actions.
+- Verify edit/save/delete flows at smartphone dimensions and run `npm run build`.
 
-After that sprint, still address truthful seasonal wording (`Saisonhinweise`) and any remaining nonfunctional settings controls before declaring the MVP clean.
+After that sprint, continue terminology, touch-target, and accessibility consolidation, then address persistence migrations, loading/error handling, and offline verification before declaring the MVP clean.

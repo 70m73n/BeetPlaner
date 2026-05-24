@@ -8,8 +8,9 @@
   let carousel;
   let scrollTimer;
   let bed = $derived(planner.activeBed(state));
-  let hints = $derived(planner.dashboardHints(state, bed).slice(0, 2));
+  let hints = $derived(planner.seasonGuidance(state, bed).slice(0, 2));
   let activeBedIndex = $derived(Math.max(0, state.beds.findIndex((item) => item.id === state.activeBedId)));
+  const currentMonth = new Intl.DateTimeFormat("de-DE", { month: "long" }).format(new Date());
 
   $effect(() => {
     if (!carousel) return;
@@ -19,7 +20,7 @@
     });
   });
 
-  function taskIcon(type) {
+  function hintIcon(type) {
     if (type.includes("Gieß")) return "♢";
     if (type.includes("Ernte")) return "♧";
     return "☘";
@@ -59,13 +60,20 @@
     <div class="bed-carousel" bind:this={carousel} onscroll={handleCarouselScroll} aria-label="Beete">
       {#each state.beds as item, index}
         <article class:active={item.id === state.activeBedId} class="card hero-card bed-slide" aria-label={`${item.name}, Beet ${index + 1} von ${state.beds.length}`}>
-          <button class="bed-slide-main" type="button" onclick={() => openBed(item.id)}>
-            <div class="card-title-row">
-              <div class="title-lockup"><span class="bed-emoji">🪴</span><div><h2>{item.name}</h2><p>{item.widthCm} × {item.lengthCm} cm</p></div></div>
-              <span class="chevron">›</span>
-            </div>
+          <div class="card-title-row">
+            <div class="title-lockup"><span class="bed-emoji">🪴</span><div><h2>{item.name}</h2><p>{item.widthCm} × {item.lengthCm} cm</p></div></div>
+          </div>
+          {#if item.id === state.activeBedId}
+            <button class="primary home-primary-action" type="button" onclick={() => openBed(item.id)}>Aktives Beet öffnen</button>
+          {/if}
+          <button class="bed-slide-main bed-preview-action" type="button" onclick={() => openBed(item.id)} aria-label={`${item.name} im Planer öffnen`}>
             <div class="hero-grid">
               <BedPreview bed={item} selectedParcel={item.id === state.activeBedId ? state.selectedParcel : ""} />
+            </div>
+            <div class="hero-field-summary" aria-label="Beetstatus">
+              <span><strong>{planner.occupiedCount(item)}</strong><small>belegt</small></span>
+              <span><strong>{planner.freeCount(item)}</strong><small>frei</small></span>
+              <span><strong>{item.fieldSizeCm} cm</strong><small>Raster</small></span>
             </div>
           </button>
         </article>
@@ -87,13 +95,14 @@
     {/if}
   </div>
 
-  <article class="card">
-    <div class="section-heading"><h2>Heute im Beet</h2><button type="button" onclick={() => planner.go("planner")}>Alle anzeigen ›</button></div>
-    <div class="task-list">
+  <article class="card season-card">
+    <div class="section-heading"><h2>Saisonhinweise</h2><button type="button" onclick={() => planner.go("planner")}>Beet öffnen ›</button></div>
+    <p class="season-caption">Orientierung für {currentMonth} aus lokalen Monatsdaten. Keine Erinnerungen.</p>
+    <div class="season-list">
       {#each hints as hint}
-        <button class="task-item" type="button" onclick={() => planner.go("planner")}>
-          <span>{taskIcon(hint.type)}</span><strong>{hint.type}</strong><small>{hint.text}</small><b>›</b>
-        </button>
+        <div class="season-item">
+          <span>{hintIcon(hint.type)}</span><strong>{hint.type}</strong><small>{hint.text}</small>
+        </div>
       {/each}
     </div>
   </article>

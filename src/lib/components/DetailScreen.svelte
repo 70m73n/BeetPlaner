@@ -21,7 +21,7 @@
   }
 </script>
 
-<AppHeader title={`Feld ${state.selectedParcel}`} compact back={() => planner.go("planner")} actions={[{ icon: "⋮", label: "Mehr" }]} />
+<AppHeader title={`Feld ${state.selectedParcel}`} compact back={() => planner.go("planner")} />
 <section class="screen detail-screen">
   <article class="card detail-hero">
     <div class="plant-portrait">{plant.icon}</div>

@@ -418,7 +418,7 @@ export function createPlannerStore() {
       notify("Lokale Daten zurückgesetzt.");
     },
 
-    dashboardHints,
+    seasonGuidance,
     recentPlantings,
     filteredPlants,
     catalogSuitability,
@@ -436,12 +436,10 @@ async function fetchJson(path) {
   return response.json();
 }
 
-function dashboardHints(state, bed) {
+function seasonGuidance(state, bed) {
   const month = new Date().getMonth() + 1;
   const plantedIds = new Set(Object.values(bed.plantings).map((planting) => planting.plantId));
-  const hints = state.data.seasonHints
-    .filter((hint) => hint.month === month && (!hint.plantId || plantedIds.has(hint.plantId)))
-    .map((hint) => ({ type: hint.type, text: hint.text }));
+  const hints = [];
 
   const free = parcelLabelsFor(bed).find((label) => !bed.plantings[label]);
   if (free) hints.push({ type: "Freies Feld", text: `Feld ${free} ist frei und kann neu bepflanzt werden.` });
@@ -450,11 +448,26 @@ function dashboardHints(state, bed) {
     const plant = state.data.plants.find((item) => item.id === planting.plantId);
     if (!plant) continue;
     if (daysSince(planting.plantedDate) >= plant.harvestDaysMin - 7) {
-      hints.push({ type: "Bald ernten", text: `${plant.name} in Feld ${label} ist bald erntereif.` });
+      hints.push({ type: "Erntehinweis", text: `${plant.name} in Feld ${label} ist bald erntereif.` });
     }
   }
 
-  return hints.length ? hints : [{ type: "Jetzt pflanzen", text: "Jetzt pflanzen: Basilikum, Tomate." }];
+  hints.push(
+    ...state.data.seasonHints
+      .filter((hint) => hint.month === month && (!hint.plantId || plantedIds.has(hint.plantId)))
+      .map((hint) => ({ type: seasonHintLabel(hint.type), text: hint.text }))
+  );
+
+  return hints.length
+    ? hints
+    : [{ type: "Saisonhinweis", text: "Für diesen Monat sind keine zusätzlichen Hinweise hinterlegt." }];
+}
+
+function seasonHintLabel(type) {
+  if (type === "Gießen") return "Gießhinweis";
+  if (type === "Bald ernten") return "Erntehinweis";
+  if (type === "Kontrollieren") return "Beobachtung";
+  return "Saisonhinweis";
 }
 
 function recentPlantings(state, bed) {

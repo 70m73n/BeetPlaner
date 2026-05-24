@@ -16,20 +16,21 @@ Der MVP prüft, ob Nutzer ein Hochbeet ohne Erklärung anlegen, ein Raster verst
 
 Der zentrale Planungsablauf ist bereits geführt umgesetzt:
 
-1. Ein Beet im Planer öffnen und das vollständige Raster sehen.
-2. Ein freies oder belegtes Feld antippen, ohne den Planungskontext zu verlassen.
-3. Bei einem freien Feld über `Pflanze auswählen` gezielt in den Feld-Auswahlmodus wechseln.
-4. Eine Pflanze anhand von Lichtbedarf, Erntezeitraum, Pflanzenanzahl und einfacher Feldeignung auswählen.
-5. Nach dem Pflanzen zurück im Raster die Pflanzung sehen und belegte Felder bewusst bearbeiten, ersetzen oder löschen.
+1. Über eine klar benannte Vorlage schnell ein Beet anlegen oder bewusst ein Maßbeet mit validiertem Raster erstellen.
+2. Auf der Startseite das aktive Beet, seinen kompakten Status und lokale `Saisonhinweise` sehen und mit `Aktives Beet öffnen` in die Planung wechseln.
+3. Im Planer das vollständige Raster sehen und ein freies oder belegtes Feld antippen, ohne den Planungskontext zu verlassen.
+4. Bei einem freien Feld über `Pflanze auswählen` gezielt in den Feld-Auswahlmodus wechseln.
+5. Eine Pflanze anhand von Lichtbedarf, Erntezeitraum, Pflanzenanzahl und einfacher Feldeignung auswählen.
+6. Nach dem Pflanzen zurück im Raster die Pflanzung sehen und belegte Felder bewusst bearbeiten, ersetzen oder löschen.
 
-Änderungen im Planer werden automatisch in `localStorage` gespeichert. Der allgemeine Pflanzenkatalog bleibt daneben zum Stöbern verfügbar; `Im Beet verwenden` führt mit einer Platzierungsaufforderung in den Planer zurück.
+Änderungen im Planer werden automatisch in `localStorage` gespeichert. Der allgemeine Pflanzenkatalog bleibt daneben zum Stöbern verfügbar; `Im Beet verwenden` führt mit einer Platzierungsaufforderung in den Planer zurück. Saisonhinweise stammen aus lokalen Monatsdaten und dem aktuellen Beetstatus; sie sind keine Aufgaben, Erinnerungen oder Benachrichtigungen.
 
 ## UX-Sprint-Stand
 
 - [x] Sprint 1: Planer als geführten Arbeitsbereich strukturieren, automatische Speicherung offen kommunizieren und Feldaktionen in eine zentrale Kontextkarte legen.
 - [x] Sprint 2: Allgemeinen Katalog und konkrete Feldauswahl unterscheiden, Pflanzenkarten ergänzen und leere Suchergebnisse erklären.
-- [ ] Sprint 3: Beet-Anlage um Vorlagen zuerst und eigene Maße als Zusatzoption strukturieren.
-- [ ] Sprint 4: Startseite und Saisonhinweise schärfen.
+- [x] Sprint 3: Beet-Anlage um Vorlagen zuerst und eigene Maße als Zusatzoption strukturieren.
+- [x] Sprint 4: Startseite mit Hauptaktion und ehrlichen Saisonhinweisen schärfen sowie sichtbare Platzhalteraktionen entfernen.
 - [ ] Sprint 5: Detailansicht entschlacken.
 - [ ] Sprint 6: Begriffe, Touchbedienung und Accessibility konsolidieren.
 
@@ -83,6 +84,7 @@ Es gibt keine Cloud, kein Login, keine externe Pflicht-API und keine geheimen AP
 - KI-Planung
 - Wetterdaten, Standortdaten, Frostwarnungen
 - Push Notifications
+- Aufgaben-Engine oder Erinnerungen für Saisonhinweise
 - Shop, Abo oder Zahlungsfunktionen
 - komplexe Mischkultur-Optimierung
 - Fruchtfolge über mehrere Jahre

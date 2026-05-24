@@ -236,11 +236,6 @@ button {
   font-size: 1.8rem;
 }
 
-.chevron {
-  color: var(--green-900);
-  font-size: 2.5rem;
-}
-
 .bed-carousel-wrap {
   margin-bottom: 16px;
 }
@@ -396,7 +391,7 @@ button {
 }
 
 .home-screen .bed-preview.preview {
-  width: min(100%, calc((100svh - 190px - env(safe-area-inset-bottom)) / 2));
+  width: min(100%, calc((100svh - 340px - env(safe-area-inset-bottom)) / 2));
   margin: 0 auto;
 }
 
@@ -424,27 +419,71 @@ button {
   background: rgba(117, 176, 78, 0.75);
 }
 
-.task-list {
+.hero-field-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.hero-field-summary span {
+  display: grid;
+  gap: 2px;
+  padding: 8px 6px;
+  border-radius: 11px;
+  color: var(--green-900);
+  background: #f0f7ec;
+  text-align: center;
+}
+
+.hero-field-summary strong {
+  font-size: 0.92rem;
+}
+
+.hero-field-summary small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.home-primary-action {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 14px;
+}
+
+.bed-preview-action .hero-grid {
+  margin-top: 14px;
+}
+
+.season-caption {
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  color: var(--muted);
+  background: #f5f6f1;
+  font-size: 0.81rem;
+  line-height: 1.4;
+}
+
+.season-list {
   display: grid;
 }
 
-.task-item {
+.season-item {
   display: grid;
-  grid-template-columns: 54px 1fr 20px;
+  grid-template-columns: 54px 1fr;
   column-gap: 12px;
   align-items: center;
   padding: 12px 0;
-  border: 0;
   border-bottom: 1px solid var(--line);
-  text-align: left;
-  background: transparent;
 }
 
-.task-item:last-child {
+.season-item:last-child {
   border-bottom: 0;
 }
 
-.task-item > span {
+.season-item > span {
   grid-row: span 2;
   display: grid;
   width: 48px;
@@ -456,20 +495,13 @@ button {
   font-size: 1.4rem;
 }
 
-.task-item strong {
+.season-item strong {
   color: var(--green-900);
 }
 
-.task-item small {
+.season-item small {
   grid-column: 2;
   font-size: 0.94rem;
-}
-
-.task-item b {
-  grid-column: 3;
-  grid-row: 1 / span 2;
-  color: var(--green-900);
-  font-size: 1.8rem;
 }
 
 .recent-row,
@@ -609,11 +641,11 @@ button {
 .primary,
 .danger,
 .planner-actions button,
-.plant-strip button,
-.chip,
-.template-card,
-.bed-list-card,
-.settings-list button {
+  .plant-strip button,
+  .chip,
+  .template-card,
+  .bed-list-card,
+  .data-actions button {
   border: 1px solid rgba(15, 77, 36, 0.14);
   border-radius: 14px;
   background: white;
@@ -1263,7 +1295,7 @@ button {
 }
 
 .bed-list,
-.settings-list,
+.data-actions,
 .detail-form {
   display: grid;
   gap: 10px;
@@ -1587,15 +1619,65 @@ textarea {
   color: var(--green-900);
 }
 
-.settings-list {
-  padding: 10px;
+.data-actions h2,
+.app-facts h2 {
+  margin-bottom: 8px;
 }
 
-.settings-list button {
+.data-actions p,
+.app-facts p {
+  margin: 0 0 14px;
+  line-height: 1.45;
+}
+
+.data-actions button {
   display: flex;
+  gap: 12px;
+  align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 14px;
   text-align: left;
+}
+
+.data-actions button strong,
+.data-actions button small {
+  display: block;
+}
+
+.data-actions button small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.79rem;
+  font-weight: 600;
+}
+
+.data-actions button b {
+  color: var(--green-900);
+  font-size: 1.5rem;
+}
+
+.app-facts dl {
+  margin: 0;
+}
+
+.app-facts dl div {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.app-facts dt {
+  color: var(--muted);
+}
+
+.app-facts dd {
+  max-width: 60%;
+  margin: 0;
+  color: var(--green-900);
+  font-weight: 750;
+  text-align: right;
 }
 
 .toast {
