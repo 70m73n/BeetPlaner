@@ -255,7 +255,8 @@ export function createPlannerStore() {
     },
 
     cancelPendingPlant() {
-      commit((state) => ({ ...state, pendingPlantId: "" }));
+      clearTimeout(toastTimer);
+      commit((state) => ({ ...state, pendingPlantId: "", toast: "" }));
     },
 
     plantFromCatalog(plantId) {
@@ -415,6 +416,7 @@ export function createPlannerStore() {
     dashboardHints,
     recentPlantings,
     filteredPlants,
+    catalogSuitability,
     plausibilityText,
     nextHarvestText,
     categoryDetail,
@@ -471,6 +473,20 @@ function filteredPlants(state) {
     if (state.catalogFilters.includes("small") && !plant.smallSpaceSuitable) return false;
     return true;
   });
+}
+
+function catalogSuitability(plant, bed) {
+  const month = new Date().getMonth() + 1;
+  if (plant.recommendedFieldSizeCm > bed.fieldSizeCm) {
+    return { tone: "caution", text: "Eher groß für dieses Raster" };
+  }
+  if (!plant.plantingMonths.includes(month) && !plant.sowingMonths.includes(month)) {
+    return { tone: "season", text: "Aktuell nicht idealer Pflanzmonat" };
+  }
+  if (plant.beginnerFriendliness === "einfach") {
+    return { tone: "positive", text: "Für Anfänger geeignet" };
+  }
+  return { tone: "positive", text: "Passt gut für dieses Feld" };
 }
 
 function plausibilityText(state, bed, label, plant) {

@@ -10,7 +10,28 @@ Kernversprechen: In wenigen Minuten ein kleines Beet planen, bepflanzen und übe
 
 ## MVP-Ziel
 
-Der MVP prüft, ob Nutzer ein Hochbeet ohne Erklärung anlegen, ein Raster verstehen, ein Feld antippen, eine Pflanze auswählen, die Pflanzung speichern und danach auf der Startseite die wichtigsten saisonalen Hinweise sehen können.
+Der MVP prüft, ob Nutzer ein Hochbeet ohne Erklärung anlegen, ein Raster verstehen, ein Feld antippen, eine Pflanze auswählen, die Pflanzung automatisch lokal sichern und danach auf der Startseite die wichtigsten saisonalen Hinweise sehen können.
+
+## Aktueller Kernworkflow
+
+Der zentrale Planungsablauf ist bereits geführt umgesetzt:
+
+1. Ein Beet im Planer öffnen und das vollständige Raster sehen.
+2. Ein freies oder belegtes Feld antippen, ohne den Planungskontext zu verlassen.
+3. Bei einem freien Feld über `Pflanze auswählen` gezielt in den Feld-Auswahlmodus wechseln.
+4. Eine Pflanze anhand von Lichtbedarf, Erntezeitraum, Pflanzenanzahl und einfacher Feldeignung auswählen.
+5. Nach dem Pflanzen zurück im Raster die Pflanzung sehen und belegte Felder bewusst bearbeiten, ersetzen oder löschen.
+
+Änderungen im Planer werden automatisch in `localStorage` gespeichert. Der allgemeine Pflanzenkatalog bleibt daneben zum Stöbern verfügbar; `Im Beet verwenden` führt mit einer Platzierungsaufforderung in den Planer zurück.
+
+## UX-Sprint-Stand
+
+- [x] Sprint 1: Planer als geführten Arbeitsbereich strukturieren, automatische Speicherung offen kommunizieren und Feldaktionen in eine zentrale Kontextkarte legen.
+- [x] Sprint 2: Allgemeinen Katalog und konkrete Feldauswahl unterscheiden, Pflanzenkarten ergänzen und leere Suchergebnisse erklären.
+- [ ] Sprint 3: Beet-Anlage um Vorlagen zuerst und eigene Maße als Zusatzoption strukturieren.
+- [ ] Sprint 4: Startseite und Saisonhinweise schärfen.
+- [ ] Sprint 5: Detailansicht entschlacken.
+- [ ] Sprint 6: Begriffe, Touchbedienung und Accessibility konsolidieren.
 
 ## Setup
 
@@ -21,7 +42,9 @@ npm install
 npm run dev
 ```
 
-Danach ist die App unter `http://localhost:5173` erreichbar. Der Produktionsbuild läuft mit:
+Danach ist die App am Entwicklungsrechner unter `http://localhost:5173` erreichbar. Für den Test auf einem Smartphone im selben WLAN die von Vite ausgegebene `Network:`-Adresse verwenden, zum Beispiel `http://192.168.178.23:5173/`; `localhost` verweist auf dem Smartphone nicht auf den Entwicklungsrechner.
+
+Der Produktionsbuild läuft mit:
 
 ```bash
 npm run build
@@ -39,7 +62,7 @@ npm run build
 - `static/assets/data/bed_templates.json`: Beetvorlagen.
 - `static/assets/data/planting_templates.json`: Beispielbepflanzungen.
 - `static/assets/data/season_hints.json`: lokale Saisonhinweise.
-- `mockups/`: visuelle Referenzen.
+- `stuff/mockups/`: visuelle Referenzen.
 
 ## Lokale Speicherung
 

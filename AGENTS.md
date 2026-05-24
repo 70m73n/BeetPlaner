@@ -119,19 +119,23 @@ These product decisions and workflows are already implemented; keep them intact 
 - [x] The home screen supports horizontal swiping between multiple beds with dot navigation.
 - [x] The bottom navigation is compact and exposes settings through `Mehr`.
 - [x] The planting flow identifies the target parcel, avoids silent placement from the general catalog, and supports deliberate placement in the planner.
+- [x] The planner keeps taps on occupied fields in context, using explicit `Bearbeiten`, `Ersetzen`, and `Löschen` actions instead of opening details immediately.
+- [x] The planner communicates automatic local saving and moves demo/reset controls into secondary `Testfunktionen`.
+- [x] The catalog distinguishes general browsing from selection for a specific field, including field-size context and a deliberate cancel path.
+- [x] Catalog cards expose simple suitability guidance from existing local data and show a clear no-results state.
 
 ## Remaining MVP Work
 
 Work through these items before treating the app as a clean MVP:
 
-- [ ] Audit every visible control and remove or implement actions that are currently placeholders, including planner save/help actions, inactive filter/header actions, and settings actions without behavior.
+- [ ] Finish auditing visible placeholder actions outside the planner/catalog changes already completed, especially settings actions without behavior.
 - [ ] Replace any misleading task language with honest seasonal guidance while hints are based on static monthly local data; use wording such as `Saisonhinweise` until there is a real task engine.
 - [ ] Standardize navigation, headers, action icons, buttons, spacing, cards, and empty/error states across all screens.
 - [ ] Complete home screen QA at `360px`, `390px`, and `430px`: verify the full active bed remains visible, multi-bed swipe and dot selection remain reliable, and status/season guidance stays secondary.
 - [ ] Simplify bed creation around clearly named templates first, custom dimensions second, with validation for dimensions and field-size combinations.
 - [x] Make the planting flow unambiguous: clearly show the selected parcel, avoid silently planting into a stale selection from the catalog, and give immediate confirmation after placing, editing, or deleting a plant.
 - [ ] Review and normalize local seed content for names, field requirements, harvest information, neighbor guidance, and seasonal hints.
-- [ ] Add loading, empty, and data-load error states for beds, catalog results, and local JSON loading.
+- [ ] Add loading, empty, and data-load error states for beds and local JSON loading. Catalog no-results feedback is already implemented.
 - [ ] Harden local persistence with a state-version/migration strategy before schema changes expand.
 - [ ] Verify offline PWA behavior, install metadata, local persistence after reload, and touch/responsive behavior at `360px`, `390px`, and `430px`.
 - [ ] Decide on a publishable app name or subtitle before release because `BeetPlaner` remains a working title with potential discoverability conflict.
@@ -160,8 +164,10 @@ Before declaring the MVP ready, verify that a new user can complete these workfl
 
 ## Next Commit-Sized Task
 
-Make the interface truthful before adding more capability:
+Continue the UX sprint sequence with bed creation:
 
-- Remove or implement visible placeholder actions in the planner, catalog headers, and settings screen.
-- Rename `Heute im Beet` to `Saisonhinweise` while recommendations are generated from static local monthly data.
-- Confirm the changed flow on a smartphone-sized viewport and run `npm run build`.
+- Reorder `BedsScreen.svelte` so existing beds and templates precede custom dimensions.
+- Strengthen template labels and make custom dimensions a deliberate secondary option.
+- Verify that newly created beds open directly in the planner, then confirm the flow at smartphone dimensions and run `npm run build`.
+
+After that sprint, still address truthful seasonal wording (`Saisonhinweise`) and any remaining nonfunctional settings controls before declaring the MVP clean.

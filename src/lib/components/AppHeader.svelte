@@ -1,11 +1,11 @@
 <script>
-  let { title, compact = false, back = null, actions = [] } = $props();
+  let { title, compact = false, narrowTitle = false, back = null, backLabel = "Zurück", actions = [] } = $props();
 </script>
 
-<header class:compact class="app-header">
+<header class:compact class:narrow-title={narrowTitle} class="app-header">
   <div class="header-row">
     {#if back}
-      <button class="icon-button ghost" type="button" onclick={back} aria-label="Zurück">←</button>
+      <button class="icon-button ghost" type="button" onclick={back} aria-label={backLabel}>←</button>
     {/if}
     <h1>{title}</h1>
     <div class="header-actions">
